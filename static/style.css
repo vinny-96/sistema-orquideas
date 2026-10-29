@@ -1,0 +1,237 @@
+/* =========================
+   COLORES
+========================= */
+
+:root {
+    --fondo: #f7faf8;
+    --primario: #27553b;
+    --primario-hover: #1e432e;
+    --secundario: #dcece1;
+    --texto: #202820;
+    --blanco: #ffffff;
+    --borde: #d9e4dc;
+    --rojo: #a33434;
+}
+
+/* =========================
+   GENERAL
+========================= */
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background-color: var(--fondo);
+    color: var(--texto);
+}
+
+.contenedor {
+    max-width: 950px;
+    margin: 50px auto;
+    padding: 20px;
+}
+
+/* =========================
+   ENCABEZADO
+========================= */
+
+.encabezado {
+    margin-bottom: 30px;
+}
+
+.etiqueta {
+    display: inline-block;
+    padding: 8px 12px;
+    background-color: var(--secundario);
+    color: var(--primario);
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: bold;
+    letter-spacing: 1px;
+}
+
+h1 {
+    color: var(--primario);
+    font-size: 32px;
+    margin-bottom: 10px;
+}
+
+h2 {
+    color: var(--primario);
+    margin-top: 0;
+}
+
+p {
+    font-size: 15px;
+    line-height: 1.6;
+}
+
+/* =========================
+   TARJETAS
+========================= */
+
+.tarjeta {
+    background-color: var(--blanco);
+    border: 1px solid var(--borde);
+    border-radius: 12px;
+    padding: 28px;
+    margin-top: 24px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+/* =========================
+   FORMULARIO
+========================= */
+
+.formulario {
+    display: flex;
+    align-items: end;
+    flex-wrap: wrap;
+    gap: 16px;
+    margin-top: 25px;
+}
+
+.campo {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-width: 170px;
+    gap: 8px;
+}
+
+label {
+    font-size: 14px;
+    font-weight: bold;
+}
+
+select,
+input[type="time"] {
+    padding: 12px;
+    border: 1px solid var(--borde);
+    border-radius: 7px;
+    background-color: var(--blanco);
+    color: var(--texto);
+    font-size: 14px;
+    width: 100%;
+}
+
+/* =========================
+   BOTONES
+========================= */
+
+button {
+    cursor: pointer;
+    font-family: inherit;
+}
+
+.boton-guardar {
+    background-color: var(--primario);
+    color: var(--blanco);
+    border: none;
+    padding: 13px 20px;
+    border-radius: 7px;
+    font-weight: bold;
+}
+
+.boton-guardar:hover {
+    background-color: var(--primario-hover);
+}
+
+.boton-eliminar {
+    background-color: #fff5f5;
+    color: var(--rojo);
+    border: 1px solid #eccaca;
+    padding: 9px 15px;
+    border-radius: 7px;
+}
+
+.boton-eliminar:hover {
+    background-color: #ffe7e7;
+}
+
+/* =========================
+   LISTA DE RIEGOS
+========================= */
+
+.lista-riegos {
+    margin-top: 20px;
+}
+
+.riego {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 15px;
+    padding: 16px;
+    border: 1px solid var(--borde);
+    border-radius: 8px;
+    margin-bottom: 12px;
+    background-color: #fbfdfb;
+}
+
+.informacion-riego {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.informacion-riego span {
+    color: #607067;
+    font-size: 14px;
+}
+
+.sin-datos {
+    color: #69776d;
+}
+
+/* =========================
+   MENSAJES
+========================= */
+
+.mensaje {
+    padding: 12px 15px;
+    border-radius: 7px;
+    margin-top: 15px;
+    font-size: 14px;
+}
+
+.mensaje.exito {
+    background-color: #e2f5e6;
+    color: #1f6c36;
+}
+
+.mensaje.error {
+    background-color: #ffe7e7;
+    color: #983434;
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media (max-width: 600px) {
+
+    .contenedor {
+        margin: 15px auto;
+    }
+
+    h1 {
+        font-size: 25px;
+    }
+
+    .tarjeta {
+        padding: 20px;
+    }
+
+    .formulario {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .riego {
+        flex-wrap: wrap;
+    }
+}

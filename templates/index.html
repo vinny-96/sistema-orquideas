@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Sistema de Monitoreo de Orquídeas</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+    <main class="contenedor">
+
+        <header class="encabezado">
+
+            <span class="etiqueta">INVERNADERO INTELIGENTE</span>
+
+            <h1>Sistema de Monitoreo de Orquídeas</h1>
+
+            <p>
+                Gestión y programación del riego
+                para el cultivo de orquídeas.
+            </p>
+
+        </header>
+
+
+        <section class="tarjeta">
+
+            <h2>Calendario de Riego</h2>
+
+            <p>
+                Selecciona el día y la hora en que
+                deseas regar tus orquídeas.
+            </p>
+
+            {% with mensajes = get_flashed_messages(with_categories=true) %}
+
+                {% for categoria, mensaje in mensajes %}
+
+                    <div class="mensaje {{ categoria }}">
+                        {{ mensaje }}
+                    </div>
+
+                {% endfor %}
+
+            {% endwith %}
+
+
+            <form
+                action="{{ url_for('agregar_riego') }}"
+                method="POST"
+                class="formulario"
+            >
+
+                <div class="campo">
+
+                    <label for="dia">
+                        Día de riego
+                    </label>
+
+                    <select
+                        id="dia"
+                        name="dia"
+                        required
+                    >
+
+                        <option value="">
+                            Seleccionar día
+                        </option>
+
+                        {% for dia in dias %}
+
+                            <option value="{{ dia }}">
+                                {{ dia|capitalize }}
+                            </option>
+
+                        {% endfor %}
+
+                    </select>
+
+                </div>
+
+
+                <div class="campo">
+
+                    <label for="hora">
+                        Hora de riego
+                    </label>
+
+                    <input
+                        type="time"
+                        id="hora"
+                        name="hora"
+                        required
+                    >
+
+                </div>
+
+
+                <button type="submit" class="boton-guardar">
+                    Guardar horario
+                </button>
+
+            </form>
+
+        </section>
+
+
+        <section class="tarjeta">
+
+            <h2>Riegos Programados</h2>
+
+            {% if calendario %}
+
+                <div class="lista-riegos">
+
+                    {% for riego in calendario %}
+
+                        <div class="riego">
+
+                            <div class="informacion-riego">
+
+                                <strong>
+                                    {{ riego.dia|capitalize }}
+                                </strong>
+
+                                <span>
+                                    {{ riego.hora }} hrs.
+                                </span>
+
+                            </div>
+
+                            <form
+                                action="{{ url_for('eliminar_riego') }}"
+                                method="POST"
+                            >
+
+                                <input
+                                    type="hidden"
+                                    name="dia"
+                                    value="{{ riego.dia }}"
+                                >
+
+                                <input
+                                    type="hidden"
+                                    name="hora"
+                                    value="{{ riego.hora }}"
+                                >
+
+                                <button
+                                    type="submit"
+                                    class="boton-eliminar"
+                                >
+                                    Eliminar
+                                </button>
+
+                            </form>
+
+                        </div>
+
+                    {% endfor %}
+
+                </div>
+
+            {% else %}
+
+                <p class="sin-datos">
+                    Todavía no tienes horarios de riego configurados.
+                </p>
+
+            {% endif %}
+
+        </section>
+
+    </main>
+
+</body>
+
+</html>
