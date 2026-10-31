@@ -234,4 +234,52 @@ button {
     .riego {
         flex-wrap: wrap;
     }
+    /* =========================
+   RF2 - NOTIFICACIONES
+========================= */
+
+.estado-notificaciones {
+    margin-top: 15px;
+    font-size: 14px;
+    color: #607067;
+}
+
+.alerta-riego {
+    margin-top: 20px;
+    padding: 20px;
+    border: 1px solid #b8d9c0;
+    background-color: #e7f5e9;
+    border-radius: 10px;
+    color: #205332;
+}
+
+.alerta-riego[hidden] {
+    display: none;
+}
+
+.alerta-riego strong {
+    font-size: 17px;
+}
+
+.alerta-riego p {
+    margin: 10px 0 15px;
+}
+
+.boton-cerrar-alerta {
+    background-color: #27553b;
+    color: #ffffff;
+    border: none;
+    border-radius: 7px;
+    padding: 10px 18px;
+    font-weight: bold;
+}
+
+.boton-cerrar-alerta:hover {
+    background-color: #1e432e;
+}
+
+button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
 }

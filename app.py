@@ -2,6 +2,7 @@ import json
 import os
 import re
 
+from datetime import datetime
 from pathlib import Path
 
 from flask import (
@@ -10,8 +11,11 @@ from flask import (
     request,
     redirect,
     url_for,
-    flash
+    flash,
+    jsonify
 )
+
+from recordatorios import obtener_riegos_pendientes
 
 
 app = Flask(__name__)
@@ -23,7 +27,7 @@ app.secret_key = os.environ.get(
 
 
 # ==============================
-# CONFIGURACIÓN DEL CALENDARIO
+# CONFIGURACIÓN
 # ==============================
 
 DIAS_SEMANA = [
@@ -57,7 +61,6 @@ def leer_calendario():
         "r",
         encoding="utf-8"
     ) as archivo:
-
         return json.load(archivo)
 
 
@@ -72,8 +75,8 @@ def guardar_calendario(calendario):
         exist_ok=True
     )
 
-    archivo_temporal = (
-        CALENDARIO_FILE.with_suffix(".tmp")
+    archivo_temporal = CALENDARIO_FILE.with_suffix(
+        ".tmp"
     )
 
     with open(
@@ -111,26 +114,15 @@ def inicio():
 
 
 # ==============================
-# AGREGAR RIEGO
+# RF1 - AGREGAR RIEGO
 # ==============================
 
-@app.route(
-    "/calendario",
-    methods=["POST"]
-)
+@app.route("/calendario", methods=["POST"])
 def agregar_riego():
 
-    dia = request.form.get(
-        "dia",
-        ""
-    ).strip()
+    dia = request.form.get("dia", "").strip()
+    hora = request.form.get("hora", "").strip()
 
-    hora = request.form.get(
-        "hora",
-        ""
-    ).strip()
-
-    # Validar día
     if dia not in DIAS_SEMANA:
 
         flash(
@@ -138,11 +130,8 @@ def agregar_riego():
             "error"
         )
 
-        return redirect(
-            url_for("inicio")
-        )
+        return redirect(url_for("inicio"))
 
-    # Validar hora
     if not re.fullmatch(
         r"(?:[01]\d|2[0-3]):[0-5]\d",
         hora
@@ -153,13 +142,10 @@ def agregar_riego():
             "error"
         )
 
-        return redirect(
-            url_for("inicio")
-        )
+        return redirect(url_for("inicio"))
 
     calendario = leer_calendario()
 
-    # Evitar duplicados
     for riego in calendario:
 
         if (
@@ -172,17 +158,13 @@ def agregar_riego():
                 "error"
             )
 
-            return redirect(
-                url_for("inicio")
-            )
+            return redirect(url_for("inicio"))
 
-    # Agregar riego
     calendario.append({
         "dia": dia,
         "hora": hora
     })
 
-    # Ordenar por día y hora
     calendario.sort(
         key=lambda riego: (
             DIAS_SEMANA.index(riego["dia"]),
@@ -190,22 +172,18 @@ def agregar_riego():
         )
     )
 
-    guardar_calendario(
-        calendario
-    )
+    guardar_calendario(calendario)
 
     flash(
         "Horario de riego guardado correctamente.",
         "exito"
     )
 
-    return redirect(
-        url_for("inicio")
-    )
+    return redirect(url_for("inicio"))
 
 
 # ==============================
-# ELIMINAR RIEGO
+# RF1 - ELIMINAR RIEGO
 # ==============================
 
 @app.route(
@@ -237,18 +215,36 @@ def eliminar_riego():
 
     else:
 
-        guardar_calendario(
-            calendario_actualizado
-        )
+        guardar_calendario(calendario_actualizado)
 
         flash(
             "Horario eliminado correctamente.",
             "exito"
         )
 
-    return redirect(
-        url_for("inicio")
+    return redirect(url_for("inicio"))
+
+
+# ==============================
+# RF2 - CONSULTAR RECORDATORIOS
+# ==============================
+
+@app.route("/api/riegos/pendientes")
+def consultar_riegos_pendientes():
+
+    calendario = leer_calendario()
+
+    ahora = datetime.now()
+
+    pendientes = obtener_riegos_pendientes(
+        calendario,
+        ahora
     )
+
+    return jsonify({
+        "fecha": ahora.strftime("%Y-%m-%d"),
+        "pendientes": pendientes
+    })
 
 
 # ==============================
@@ -256,5 +252,4 @@ def eliminar_riego():
 # ==============================
 
 if __name__ == "__main__":
-
     app.run(debug=True)

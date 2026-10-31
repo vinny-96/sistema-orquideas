@@ -19,9 +19,13 @@
 
         <header class="encabezado">
 
-            <span class="etiqueta">INVERNADERO INTELIGENTE</span>
+            <span class="etiqueta">
+                INVERNADERO INTELIGENTE
+            </span>
 
-            <h1>Sistema de Monitoreo de Orquídeas</h1>
+            <h1>
+                Sistema de Monitoreo de Orquídeas
+            </h1>
 
             <p>
                 Gestión y programación del riego
@@ -30,6 +34,8 @@
 
         </header>
 
+
+        <!-- RF1: CALENDARIO DE RIEGO -->
 
         <section class="tarjeta">
 
@@ -65,11 +71,7 @@
                         Día de riego
                     </label>
 
-                    <select
-                        id="dia"
-                        name="dia"
-                        required
-                    >
+                    <select id="dia" name="dia" required>
 
                         <option value="">
                             Seleccionar día
@@ -104,7 +106,10 @@
                 </div>
 
 
-                <button type="submit" class="boton-guardar">
+                <button
+                    type="submit"
+                    class="boton-guardar"
+                >
                     Guardar horario
                 </button>
 
@@ -112,6 +117,60 @@
 
         </section>
 
+
+        <!-- RF2: NOTIFICACIONES -->
+
+        <section class="tarjeta">
+
+            <h2>Recordatorios de Riego</h2>
+
+            <p>
+                Recibe un aviso cuando llegue el
+                horario de riego programado.
+            </p>
+
+            <button
+                type="button"
+                id="activar-notificaciones"
+                class="boton-guardar"
+            >
+                Activar notificaciones
+            </button>
+
+            <p
+                id="estado-notificaciones"
+                class="estado-notificaciones"
+            >
+                Comprobando permisos...
+            </p>
+
+            <div
+                id="alerta-riego"
+                class="alerta-riego"
+                role="status"
+                hidden
+            >
+
+                <strong>
+                    Recordatorio de riego
+                </strong>
+
+                <p id="texto-alerta-riego"></p>
+
+                <button
+                    type="button"
+                    id="cerrar-alerta"
+                    class="boton-cerrar-alerta"
+                >
+                    Entendido
+                </button>
+
+            </div>
+
+        </section>
+
+
+        <!-- RF1: RIEGOS PROGRAMADOS -->
 
         <section class="tarjeta">
 
@@ -172,7 +231,8 @@
             {% else %}
 
                 <p class="sin-datos">
-                    Todavía no tienes horarios de riego configurados.
+                    Todavía no tienes horarios
+                    de riego configurados.
                 </p>
 
             {% endif %}
@@ -181,6 +241,11 @@
 
     </main>
 
-</body>
 
+    <script
+        src="{{ url_for('static', filename='notificaciones.js') }}"
+        defer
+    ></script>
+
+</body>
 </html>
