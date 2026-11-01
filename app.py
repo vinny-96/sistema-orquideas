@@ -2,6 +2,7 @@ import json
 import os
 import re
 
+from api_sensores import sensores_bp
 from datetime import datetime
 from pathlib import Path
 
@@ -19,6 +20,7 @@ from recordatorios import obtener_riegos_pendientes
 
 
 app = Flask(__name__)
+app.register_blueprint(sensores_bp)
 
 app.secret_key = os.environ.get(
     "FLASK_SECRET_KEY",
@@ -252,4 +254,4 @@ def consultar_riegos_pendientes():
 # ==============================
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(host="0.0.0.0", port=5000, debug=False)
