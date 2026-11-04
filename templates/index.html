@@ -18,6 +18,8 @@
 
     <main class="contenedor">
 
+        <!-- ENCABEZADO -->
+
         <header class="encabezado">
 
             <span class="etiqueta">
@@ -238,29 +240,42 @@
         </section>
 
 
-        <!-- RF4: MONITOREO DE HUMEDAD - V5 -->
+        <!-- RF4 Y RF7: MONITOREO AMBIENTAL - V5 Y V6 -->
 
         <section class="tarjeta">
 
             <h2>Monitoreo ambiental</h2>
 
             <p>
-                Consulta la última medición de humedad
-                registrada por el sistema y verifica
-                si se encuentra dentro del rango configurado.
+                Consulta las condiciones ambientales
+                registradas por el sistema y supervisa
+                la humedad y temperatura de tus orquídeas.
             </p>
+
+            <!-- V5: MONITOREO DE HUMEDAD -->
 
             <a
                 href="{{ url_for('monitoreo.pagina_humedad') }}"
                 class="enlace-monitoreo"
             >
-                Ver monitoreo de humedad
+                Monitoreo de humedad
+            </a>
+
+            <!-- V6: MONITOREO EN TIEMPO REAL -->
+
+            <a
+                href="{{ url_for('tiempo_real.pagina_tiempo_real') }}"
+                class="enlace-monitoreo"
+            >
+                Humedad y temperatura en tiempo real
             </a>
 
         </section>
 
     </main>
 
+
+    <!-- JAVASCRIPT DE NOTIFICACIONES -->
 
     <script
         src="{{ url_for('static', filename='notificaciones.js') }}"

@@ -6,6 +6,7 @@ from api_sensores import sensores_bp
 from datetime import datetime
 from pathlib import Path
 from monitoreo_humedad import monitoreo_bp
+from tiempo_real import tiempo_real_bp
 
 
 from flask import (
@@ -24,6 +25,7 @@ from recordatorios import obtener_riegos_pendientes
 app = Flask(__name__)
 app.register_blueprint(sensores_bp)
 app.register_blueprint(monitoreo_bp)
+app.register_blueprint(tiempo_real_bp)
 
 app.secret_key = os.environ.get(
     "FLASK_SECRET_KEY",

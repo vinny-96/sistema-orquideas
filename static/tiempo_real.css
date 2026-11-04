@@ -1,0 +1,324 @@
+
+/* ==============================
+   V6 - MONITOREO EN TIEMPO REAL
+============================== */
+
+:root {
+    --fondo: #f7faf8;
+    --primario: #27553b;
+    --primario-hover: #1e432e;
+    --secundario: #dcece1;
+    --texto: #202820;
+    --blanco: #ffffff;
+    --borde: #d9e4dc;
+    --gris: #607067;
+    --rojo: #a33434;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background-color: var(--fondo);
+    color: var(--texto);
+}
+
+/* ==============================
+   CONTENEDOR
+============================== */
+
+.tr-contenedor {
+    max-width: 1000px;
+    margin: 40px auto;
+    padding: 20px;
+}
+
+/* ==============================
+   ENCABEZADO
+============================== */
+
+.tr-encabezado {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.tr-etiqueta {
+    display: inline-block;
+    background-color: var(--secundario);
+    color: var(--primario);
+    padding: 8px 14px;
+    border-radius: 7px;
+    font-size: 12px;
+    font-weight: bold;
+    letter-spacing: 1px;
+}
+
+.tr-encabezado h1 {
+    color: var(--primario);
+    font-size: 34px;
+    margin: 18px 0 10px;
+}
+
+.tr-encabezado p {
+    color: var(--gris);
+    line-height: 1.6;
+}
+
+/* ==============================
+   NAVEGACION
+============================== */
+
+.tr-navegacion {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-bottom: 25px;
+}
+
+.tr-navegacion a,
+.tr-navegacion button {
+    display: inline-block;
+    padding: 12px 18px;
+    background-color: var(--primario);
+    color: var(--blanco);
+    border: none;
+    border-radius: 8px;
+    text-decoration: none;
+    font-size: 14px;
+    font-family: inherit;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.tr-navegacion a:hover,
+.tr-navegacion button:hover {
+    background-color: var(--primario-hover);
+}
+
+/* ==============================
+   ESTADO DE CONEXION
+============================== */
+
+.tr-estado-conexion {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    background: var(--blanco);
+    border: 1px solid var(--borde);
+    border-radius: 10px;
+    padding: 12px 20px;
+    margin-bottom: 25px;
+}
+
+.tr-estado-conexion p {
+    margin: 0;
+    color: var(--gris);
+    font-size: 14px;
+}
+
+.tr-indicador {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background-color: #d7a13a;
+    flex-shrink: 0;
+}
+
+.tr-indicador.activo {
+    background-color: #2b9b58;
+}
+
+.tr-indicador.error {
+    background-color: #d34c4c;
+}
+
+.tr-indicador.advertencia {
+    background-color: #d7a13a;
+}
+
+/* ==============================
+   TARJETAS DE MEDICIONES
+============================== */
+
+.tr-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 20px;
+    margin-bottom: 25px;
+}
+
+.tr-tarjeta {
+    background-color: var(--blanco);
+    border: 1px solid var(--borde);
+    border-radius: 15px;
+    padding: 30px;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.05);
+}
+
+.tr-grid .tr-tarjeta {
+    text-align: center;
+}
+
+.tr-tarjeta h2 {
+    color: var(--primario);
+    font-size: 21px;
+    margin: 0 0 20px;
+}
+
+.tr-icono {
+    font-size: 42px;
+    margin-bottom: 14px;
+}
+
+.tr-valor {
+    display: flex;
+    align-items: baseline;
+    justify-content: center;
+    gap: 8px;
+    color: var(--primario);
+    font-size: 58px;
+    font-weight: bold;
+    margin: 15px 0;
+}
+
+.tr-unidad {
+    font-size: 28px;
+}
+
+.tr-descripcion {
+    color: var(--gris);
+    font-size: 14px;
+    line-height: 1.6;
+    margin-bottom: 0;
+}
+
+/* ==============================
+   INFORMACION DE MEDICION
+============================== */
+
+.tr-informacion {
+    margin-bottom: 25px;
+}
+
+.tr-detalle {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 15px;
+    padding: 15px 0;
+    border-bottom: 1px solid var(--borde);
+}
+
+.tr-detalle:last-child {
+    border-bottom: none;
+}
+
+.tr-detalle span {
+    color: var(--gris);
+    font-size: 14px;
+}
+
+.tr-detalle strong {
+    text-align: right;
+    font-size: 14px;
+    overflow-wrap: anywhere;
+}
+
+/* ==============================
+   AVISOS
+============================== */
+
+.tr-aviso {
+    background-color: #fff5dd;
+    color: #805b19;
+    border-left: 4px solid #d7a13a;
+    border-radius: 9px;
+    padding: 18px 20px;
+    margin-bottom: 18px;
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+.tr-aviso[hidden] {
+    display: none;
+}
+
+#aviso-antiguedad {
+    background-color: #fff0df;
+    border-left-color: #d98b29;
+}
+
+/* ==============================
+   PIE DE PAGINA
+============================== */
+
+.tr-footer {
+    margin-top: 35px;
+    padding: 20px;
+    text-align: center;
+    color: var(--gris);
+    font-size: 13px;
+    border-top: 1px solid var(--borde);
+}
+
+.tr-footer p {
+    margin: 7px 0;
+}
+
+/* ==============================
+   RESPONSIVE
+============================== */
+
+@media (max-width: 600px) {
+
+    .tr-contenedor {
+        margin: 15px auto;
+        padding: 15px;
+    }
+
+    .tr-encabezado h1 {
+        font-size: 27px;
+    }
+
+    .tr-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .tr-tarjeta {
+        padding: 22px;
+    }
+
+    .tr-valor {
+        font-size: 48px;
+    }
+
+    .tr-unidad {
+        font-size: 24px;
+    }
+
+    .tr-navegacion {
+        flex-direction: column;
+    }
+
+    .tr-navegacion a,
+    .tr-navegacion button {
+        width: 100%;
+        text-align: center;
+    }
+
+    .tr-detalle {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 6px;
+    }
+
+    .tr-detalle strong {
+        text-align: left;
+    }
+}

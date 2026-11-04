@@ -1,0 +1,234 @@
+
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Monitoreo en Tiempo Real - Orquídeas</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='tiempo_real.css') }}">
+
+    <script
+        src="{{ url_for('static', filename='tiempo_real.js') }}"
+        defer>
+    </script>
+</head>
+
+<body>
+
+<main
+    class="tr-contenedor"
+    id="panel-tiempo-real"
+    data-api-url="{{ url_for('tiempo_real.consultar_tiempo_real') }}"
+>
+
+    <!-- ENCABEZADO -->
+
+    <header class="tr-encabezado">
+
+        <span class="tr-etiqueta">
+            INVERNADERO INTELIGENTE
+        </span>
+
+        <h1>
+            Monitoreo en tiempo real
+        </h1>
+
+        <p>
+            Consulta automáticamente las últimas
+            mediciones de humedad y temperatura.
+        </p>
+
+    </header>
+
+
+    <!-- NAVEGACIÓN -->
+
+    <nav class="tr-navegacion">
+
+        <a href="{{ url_for('inicio') }}">
+            Volver al calendario
+        </a>
+
+        <a href="{{ url_for('monitoreo.pagina_humedad') }}">
+            Monitoreo de humedad
+        </a>
+
+        <button type="button" id="actualizar-ahora">
+            Actualizar ahora
+        </button>
+
+    </nav>
+
+
+    <!-- ESTADO DE CONEXIÓN -->
+
+    <section class="tr-estado-conexion">
+
+        <span
+            id="indicador-conexion"
+            class="tr-indicador">
+        </span>
+
+        <p id="estado-conexion" role="status" aria-live="polite">
+            Consultando mediciones...
+        </p>
+
+    </section>
+
+
+    <!-- TARJETAS DE MEDICIONES -->
+
+    <section class="tr-grid">
+
+        <!-- HUMEDAD -->
+
+        <article class="tr-tarjeta">
+
+            <h2>
+                Humedad ambiental
+            </h2>
+
+            <div class="tr-icono">
+                💧
+            </div>
+
+            <div class="tr-valor">
+                <span id="valor-humedad">--</span>
+                <span class="tr-unidad">%</span>
+            </div>
+
+            <p class="tr-descripcion">
+                Humedad registrada por el dispositivo.
+            </p>
+
+        </article>
+
+
+        <!-- TEMPERATURA -->
+
+        <article class="tr-tarjeta">
+
+            <h2>
+                Temperatura ambiental
+            </h2>
+
+            <div class="tr-icono">
+                🌡️
+            </div>
+
+            <div class="tr-valor">
+                <span id="valor-temperatura">--</span>
+                <span class="tr-unidad">°C</span>
+            </div>
+
+            <p class="tr-descripcion">
+                Temperatura registrada por el dispositivo.
+            </p>
+
+        </article>
+
+    </section>
+
+
+    <!-- INFORMACIÓN DE LA MEDICIÓN -->
+
+    <section class="tr-tarjeta tr-informacion">
+
+        <h2>
+            Información de la última medición
+        </h2>
+
+        <div class="tr-detalle">
+
+            <span>Dispositivo</span>
+
+            <strong id="sensor-id">
+                --
+            </strong>
+
+        </div>
+
+        <div class="tr-detalle">
+
+            <span>Origen de los datos</span>
+
+            <strong id="origen-medicion">
+                --
+            </strong>
+
+        </div>
+
+        <div class="tr-detalle">
+
+            <span>Fecha de registro</span>
+
+            <strong id="fecha-medicion">
+                --
+            </strong>
+
+        </div>
+
+        <div class="tr-detalle">
+
+            <span>Última actualización del panel</span>
+
+            <strong id="ultima-actualizacion">
+                --
+            </strong>
+
+        </div>
+
+    </section>
+
+
+    <!-- AVISO DE DATOS ANTIGUOS -->
+
+    <section
+        class="tr-aviso"
+        id="aviso-antiguedad"
+        role="status"
+        hidden
+    >
+        La última medición es antigua.
+        Comprueba que el ESP8266 esté enviando datos.
+    </section>
+
+
+    <!-- AVISO DE SIMULACIÓN -->
+
+    <section
+        class="tr-aviso"
+        id="aviso-simulacion"
+        hidden
+    >
+        Estos datos son simulados.
+        No representan necesariamente las
+        condiciones ambientales reales.
+    </section>
+
+
+    <!-- PIE DE PÁGINA -->
+
+    <footer class="tr-footer">
+
+        <p>
+            Los datos se consultan automáticamente
+            cada 5 segundos.
+        </p>
+
+        <p>
+            Sistema de Monitoreo de Orquídeas
+        </p>
+
+    </footer>
+
+</main>
+
+</body>
+</html>
