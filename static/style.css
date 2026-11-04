@@ -24,9 +24,25 @@
 
 body {
     margin: 0;
+    min-height: 100vh;
+
     font-family: Arial, sans-serif;
-    background-color: var(--fondo);
     color: var(--texto);
+
+    /* Fondo de orquideas */
+    background-color: #e8f3e5;
+
+    background-image:
+        linear-gradient(
+            rgba(247, 250, 248, 0.10),
+            rgba(247, 250, 248, 0.10)
+        ),
+        url("/static/orquideas_fondo.png");
+
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center center;
+    background-attachment: fixed;
 }
 
 .contenedor {
@@ -75,12 +91,14 @@ p {
 ========================= */
 
 .tarjeta {
-    background-color: var(--blanco);
+    background-color: rgba(255, 255, 255, 0.94);
     border: 1px solid var(--borde);
     border-radius: 12px;
     padding: 28px;
     margin-top: 24px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+
+    box-shadow:
+        0 4px 15px rgba(0, 0, 0, 0.08);
 }
 
 /* =========================
@@ -170,7 +188,7 @@ button {
     border: 1px solid var(--borde);
     border-radius: 8px;
     margin-bottom: 12px;
-    background-color: #fbfdfb;
+    background-color: rgba(251, 253, 251, 0.95);
 }
 
 .informacion-riego {
@@ -259,18 +277,22 @@ button:disabled {
 }
 
 /* =========================
-   V5 - BOTON DE MONITOREO
+   V5 - BOTONES DE MONITOREO
 ========================= */
 
 a.enlace-monitoreo {
     display: inline-block;
     margin-top: 10px;
+    margin-right: 10px;
     padding: 12px 20px;
+
     background-color: var(--primario);
     color: var(--blanco);
+
     text-decoration: none;
     font-weight: bold;
     border-radius: 8px;
+
     transition: background-color 0.2s ease;
 }
 
@@ -284,6 +306,10 @@ a.enlace-monitoreo:hover {
 ========================= */
 
 @media (max-width: 600px) {
+
+    body {
+        background-attachment: scroll;
+    }
 
     .contenedor {
         margin: 15px auto;
@@ -309,6 +335,6 @@ a.enlace-monitoreo:hover {
     a.enlace-monitoreo {
         width: 100%;
         text-align: center;
+        margin-right: 0;
     }
 }
-

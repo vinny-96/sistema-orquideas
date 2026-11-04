@@ -1,8 +1,9 @@
 
 /* =====================================
-   V5 + V6 - MONITOREO AMBIENTAL
+   V5 + V6 + V7 - MONITOREO AMBIENTAL
    Sistema de Monitoreo de Orquideas
 ===================================== */
+
 
 /* =====================================
    COLORES GENERALES
@@ -24,11 +25,31 @@
     box-sizing: border-box;
 }
 
+
+/* =====================================
+   FONDO UNIFICADO DE ORQUIDEAS
+===================================== */
+
 body {
     margin: 0;
+    min-height: 100vh;
+
     font-family: Arial, sans-serif;
-    background-color: var(--fondo);
     color: var(--texto);
+
+    background-color: #e8f3e5;
+
+    background-image:
+        linear-gradient(
+            rgba(247, 250, 248, 0.10),
+            rgba(247, 250, 248, 0.10)
+        ),
+        url("/static/orquideas_fondo.png");
+
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center center;
+    background-attachment: fixed;
 }
 
 
@@ -124,7 +145,9 @@ body {
     justify-content: center;
     align-items: center;
     gap: 10px;
-    background-color: var(--blanco);
+
+    background-color: rgba(255, 255, 255, 0.94);
+
     border: 1px solid var(--borde);
     border-radius: 10px;
     padding: 12px 20px;
@@ -170,11 +193,13 @@ body {
 }
 
 .tr-tarjeta {
-    background-color: var(--blanco);
+    background-color: rgba(255, 255, 255, 0.94);
     border: 1px solid var(--borde);
     border-radius: 15px;
     padding: 30px;
-    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.05);
+
+    box-shadow:
+        0 4px 15px rgba(0, 0, 0, 0.08);
 }
 
 .tr-grid .tr-tarjeta {
@@ -197,6 +222,7 @@ body {
     align-items: baseline;
     justify-content: center;
     gap: 8px;
+
     color: var(--primario);
     font-size: 58px;
     font-weight: bold;
@@ -377,6 +403,10 @@ body {
 
 @media (max-width: 600px) {
 
+    body {
+        background-attachment: scroll;
+    }
+
     .tr-contenedor {
         margin: 15px auto;
         padding: 15px;
@@ -431,5 +461,4 @@ body {
     #mensaje-humedad {
         font-size: 13px;
     }
-
 }
