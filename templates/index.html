@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="es">
 
@@ -58,7 +59,6 @@
 
             {% endwith %}
 
-
             <form
                 action="{{ url_for('agregar_riego') }}"
                 method="POST"
@@ -89,7 +89,6 @@
 
                 </div>
 
-
                 <div class="campo">
 
                     <label for="hora">
@@ -104,7 +103,6 @@
                     >
 
                 </div>
-
 
                 <button
                     type="submit"
@@ -236,6 +234,28 @@
                 </p>
 
             {% endif %}
+
+        </section>
+
+
+        <!-- RF4: MONITOREO DE HUMEDAD - V5 -->
+
+        <section class="tarjeta">
+
+            <h2>Monitoreo ambiental</h2>
+
+            <p>
+                Consulta la última medición de humedad
+                registrada por el sistema y verifica
+                si se encuentra dentro del rango configurado.
+            </p>
+
+            <a
+                href="{{ url_for('monitoreo.pagina_humedad') }}"
+                class="enlace-monitoreo"
+            >
+                Ver monitoreo de humedad
+            </a>
 
         </section>
 

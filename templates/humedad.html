@@ -1,0 +1,132 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Monitoreo de Humedad - Orquídeas</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='humedad.css') }}">
+</head>
+
+<body>
+
+<main class="hm-contenedor">
+
+    <header class="hm-encabezado">
+        <h1>Monitoreo de humedad</h1>
+        <p>
+            Sistema de Monitoreo de Orquídeas
+        </p>
+    </header>
+
+    <nav class="hm-navegacion">
+        <a href="{{ url_for('inicio') }}">
+            Volver al calendario
+        </a>
+
+        <a href="{{ url_for('monitoreo.pagina_humedad') }}">
+            Actualizar medición
+        </a>
+    </nav>
+
+    {% if error %}
+
+        <section class="hm-tarjeta">
+            <h2>No se pudo consultar la humedad</h2>
+            <p>{{ error }}</p>
+            <p>
+                Comprueba que MySQL esté iniciado.
+            </p>
+        </section>
+
+    {% elif not resultado.hay_datos %}
+
+        <section class="hm-tarjeta">
+            <h2>Sin mediciones</h2>
+            <p>{{ resultado.mensaje }}</p>
+            <p>
+                Inicia el ESP8266 para enviar
+                lecturas simuladas.
+            </p>
+        </section>
+
+    {% else %}
+
+        <section class="hm-tarjeta">
+
+            <p class="hm-etiqueta">
+                Última humedad ambiental registrada
+            </p>
+
+            <div class="hm-valor">
+                {{ "%.1f"|format(resultado.humedad) }}%
+            </div>
+
+            <div class="hm-estado hm-{{ resultado.codigo }}">
+                {{ resultado.estado }}
+            </div>
+
+            <p class="hm-mensaje">
+                {{ resultado.mensaje }}
+            </p>
+
+        </section>
+
+        <section class="hm-tarjeta">
+
+            <h2>Información de la medición</h2>
+
+            <div class="hm-detalle">
+                <span>Dispositivo</span>
+                <strong>{{ resultado.sensor_id }}</strong>
+            </div>
+
+            <div class="hm-detalle">
+                <span>Origen</span>
+                <strong>{{ resultado.origen }}</strong>
+            </div>
+
+            <div class="hm-detalle">
+                <span>Fecha de registro</span>
+                <strong>{{ resultado.fecha_hora }}</strong>
+            </div>
+
+            <div class="hm-detalle">
+                <span>Humedad mínima</span>
+                <strong>{{ resultado.limite_minimo }}%</strong>
+            </div>
+
+            <div class="hm-detalle">
+                <span>Humedad máxima</span>
+                <strong>{{ resultado.limite_maximo }}%</strong>
+            </div>
+
+        </section>
+
+        {% if resultado.simulada %}
+
+        <section class="hm-aviso">
+            Esta medición es simulada.
+            No representa necesariamente las
+            condiciones ambientales reales.
+        </section>
+
+        {% else %}
+
+        <section class="hm-aviso">
+            El origen de esta medición todavía
+            no ha sido verificado como sensor físico.
+        </section>
+
+        {% endif %}
+
+    {% endif %}
+
+</main>
+
+</body>
+</html>

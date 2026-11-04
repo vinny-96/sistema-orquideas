@@ -1,0 +1,170 @@
+
+/* V5 - Monitoreo de humedad */
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    background: #f1f6f2;
+    color: #24392e;
+    font-family: Arial, sans-serif;
+}
+
+.hm-contenedor {
+    width: 100%;
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 35px 20px 60px;
+}
+
+.hm-encabezado {
+    text-align: center;
+    margin-bottom: 25px;
+}
+
+.hm-encabezado h1 {
+    margin: 0 0 10px;
+    color: #176b46;
+    font-size: 32px;
+}
+
+.hm-encabezado p {
+    margin: 0;
+    color: #64746a;
+}
+
+.hm-navegacion {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-bottom: 28px;
+}
+
+.hm-navegacion a {
+    display: inline-block;
+    padding: 11px 18px;
+    background: #176b46;
+    color: white;
+    text-decoration: none;
+    border-radius: 9px;
+    font-weight: bold;
+}
+
+.hm-navegacion a:hover {
+    background: #105334;
+}
+
+.hm-tarjeta {
+    background: white;
+    padding: 30px;
+    margin-bottom: 22px;
+    border-radius: 16px;
+    box-shadow: 0 4px 18px rgba(0, 0, 0, 0.07);
+}
+
+.hm-etiqueta {
+    text-align: center;
+    color: #64746a;
+    margin: 0 0 15px;
+}
+
+.hm-valor {
+    font-size: 64px;
+    font-weight: bold;
+    color: #176b46;
+    text-align: center;
+    margin-bottom: 15px;
+}
+
+.hm-estado {
+    width: fit-content;
+    margin: 0 auto 15px;
+    padding: 10px 22px;
+    border-radius: 30px;
+    font-weight: bold;
+}
+
+.hm-adecuada {
+    background: #d9f4e2;
+    color: #176b46;
+}
+
+.hm-baja {
+    background: #fff1ce;
+    color: #936000;
+}
+
+.hm-alta {
+    background: #ffe0dc;
+    color: #aa3028;
+}
+
+.hm-mensaje {
+    text-align: center;
+    color: #5a695f;
+    line-height: 1.6;
+}
+
+.hm-tarjeta h2 {
+    color: #176b46;
+    margin: 0 0 22px;
+    font-size: 22px;
+}
+
+.hm-detalle {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 15px;
+    padding: 14px 0;
+    border-bottom: 1px solid #e6eee8;
+}
+
+.hm-detalle:last-child {
+    border-bottom: none;
+}
+
+.hm-detalle span {
+    color: #63756a;
+}
+
+.hm-detalle strong {
+    text-align: right;
+    overflow-wrap: anywhere;
+}
+
+.hm-aviso {
+    background: #fff6dd;
+    border-left: 4px solid #d6a437;
+    padding: 18px;
+    border-radius: 9px;
+    color: #705719;
+    line-height: 1.6;
+}
+
+@media (max-width: 600px) {
+    .hm-contenedor {
+        padding: 22px 15px 40px;
+    }
+
+    .hm-tarjeta {
+        padding: 20px;
+    }
+
+    .hm-valor {
+        font-size: 48px;
+    }
+
+    .hm-detalle {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 5px;
+    }
+
+    .hm-detalle strong {
+        text-align: left;
+    }
+}

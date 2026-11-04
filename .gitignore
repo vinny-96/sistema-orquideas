@@ -6,3 +6,5 @@ __pycache__/
 .vscode/
 data/calendario.json
 data/*.tmp
+# Credenciales privadas de dispositivos
+**/secretos.h

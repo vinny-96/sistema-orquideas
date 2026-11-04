@@ -1,3 +1,4 @@
+
 /* =========================
    COLORES
 ========================= */
@@ -209,32 +210,6 @@ button {
 }
 
 /* =========================
-   RESPONSIVE
-========================= */
-
-@media (max-width: 600px) {
-
-    .contenedor {
-        margin: 15px auto;
-    }
-
-    h1 {
-        font-size: 25px;
-    }
-
-    .tarjeta {
-        padding: 20px;
-    }
-
-    .formulario {
-        flex-direction: column;
-        align-items: stretch;
-    }
-
-    .riego {
-        flex-wrap: wrap;
-    }
-    /* =========================
    RF2 - NOTIFICACIONES
 ========================= */
 
@@ -266,8 +241,8 @@ button {
 }
 
 .boton-cerrar-alerta {
-    background-color: #27553b;
-    color: #ffffff;
+    background-color: var(--primario);
+    color: var(--blanco);
     border: none;
     border-radius: 7px;
     padding: 10px 18px;
@@ -275,11 +250,65 @@ button {
 }
 
 .boton-cerrar-alerta:hover {
-    background-color: #1e432e;
+    background-color: var(--primario-hover);
 }
 
 button:disabled {
     opacity: 0.6;
     cursor: not-allowed;
 }
+
+/* =========================
+   V5 - BOTON DE MONITOREO
+========================= */
+
+a.enlace-monitoreo {
+    display: inline-block;
+    margin-top: 10px;
+    padding: 12px 20px;
+    background-color: var(--primario);
+    color: var(--blanco);
+    text-decoration: none;
+    font-weight: bold;
+    border-radius: 8px;
+    transition: background-color 0.2s ease;
 }
+
+a.enlace-monitoreo:hover {
+    background-color: var(--primario-hover);
+    color: var(--blanco);
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media (max-width: 600px) {
+
+    .contenedor {
+        margin: 15px auto;
+    }
+
+    h1 {
+        font-size: 25px;
+    }
+
+    .tarjeta {
+        padding: 20px;
+    }
+
+    .formulario {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .riego {
+        flex-wrap: wrap;
+    }
+
+    a.enlace-monitoreo {
+        width: 100%;
+        text-align: center;
+    }
+}
+
