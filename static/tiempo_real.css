@@ -1,7 +1,12 @@
 
-/* ==============================
-   V6 - MONITOREO EN TIEMPO REAL
-============================== */
+/* =====================================
+   V5 + V6 - MONITOREO AMBIENTAL
+   Sistema de Monitoreo de Orquideas
+===================================== */
+
+/* =====================================
+   COLORES GENERALES
+===================================== */
 
 :root {
     --fondo: #f7faf8;
@@ -26,9 +31,10 @@ body {
     color: var(--texto);
 }
 
-/* ==============================
+
+/* =====================================
    CONTENEDOR
-============================== */
+===================================== */
 
 .tr-contenedor {
     max-width: 1000px;
@@ -36,9 +42,10 @@ body {
     padding: 20px;
 }
 
-/* ==============================
+
+/* =====================================
    ENCABEZADO
-============================== */
+===================================== */
 
 .tr-encabezado {
     text-align: center;
@@ -67,9 +74,10 @@ body {
     line-height: 1.6;
 }
 
-/* ==============================
+
+/* =====================================
    NAVEGACION
-============================== */
+===================================== */
 
 .tr-navegacion {
     display: flex;
@@ -93,6 +101,7 @@ body {
     font-family: inherit;
     font-weight: bold;
     cursor: pointer;
+    transition: background-color 0.2s ease;
 }
 
 .tr-navegacion a:hover,
@@ -100,16 +109,22 @@ body {
     background-color: var(--primario-hover);
 }
 
-/* ==============================
+.tr-navegacion button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+
+/* =====================================
    ESTADO DE CONEXION
-============================== */
+===================================== */
 
 .tr-estado-conexion {
     display: flex;
     justify-content: center;
     align-items: center;
     gap: 10px;
-    background: var(--blanco);
+    background-color: var(--blanco);
     border: 1px solid var(--borde);
     border-radius: 10px;
     padding: 12px 20px;
@@ -142,9 +157,10 @@ body {
     background-color: #d7a13a;
 }
 
-/* ==============================
+
+/* =====================================
    TARJETAS DE MEDICIONES
-============================== */
+===================================== */
 
 .tr-grid {
     display: grid;
@@ -198,9 +214,79 @@ body {
     margin-bottom: 0;
 }
 
-/* ==============================
-   INFORMACION DE MEDICION
-============================== */
+
+/* =====================================
+   V5 - ESTADO DE HUMEDAD
+===================================== */
+
+.tr-humedad-estado {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 10px 18px;
+    margin: 8px 0 12px;
+
+    border-radius: 25px;
+    border: 1px solid var(--borde);
+
+    background-color: #f0f3f1;
+    color: var(--gris);
+
+    font-size: 14px;
+    font-weight: bold;
+    line-height: 1.4;
+    text-align: center;
+}
+
+
+/* =====================================
+   HUMEDAD ADECUADA - VERDE
+===================================== */
+
+.tr-humedad-adecuada {
+    background-color: #e2f3e7;
+    color: #21653c;
+    border-color: #8bc69d;
+}
+
+
+/* =====================================
+   HUMEDAD BAJA - AMARILLO
+===================================== */
+
+.tr-humedad-baja {
+    background-color: #fff2d3;
+    color: #865a10;
+    border-color: #e5bc65;
+}
+
+
+/* =====================================
+   HUMEDAD ALTA - ROJO
+===================================== */
+
+.tr-humedad-alta {
+    background-color: #fde7e7;
+    color: #9d3030;
+    border-color: #e1a1a1;
+}
+
+
+/* =====================================
+   MENSAJE DE EVALUACION
+===================================== */
+
+#mensaje-humedad {
+    max-width: 340px;
+    margin: 4px auto 0;
+    line-height: 1.6;
+}
+
+
+/* =====================================
+   INFORMACION DE LA MEDICION
+===================================== */
 
 .tr-informacion {
     margin-bottom: 25px;
@@ -230,9 +316,21 @@ body {
     overflow-wrap: anywhere;
 }
 
-/* ==============================
+
+/* =====================================
+   V5 - LIMITES DE HUMEDAD
+===================================== */
+
+#humedad-minima,
+#humedad-maxima {
+    color: var(--primario);
+    font-weight: bold;
+}
+
+
+/* =====================================
    AVISOS
-============================== */
+===================================== */
 
 .tr-aviso {
     background-color: #fff5dd;
@@ -254,9 +352,10 @@ body {
     border-left-color: #d98b29;
 }
 
-/* ==============================
+
+/* =====================================
    PIE DE PAGINA
-============================== */
+===================================== */
 
 .tr-footer {
     margin-top: 35px;
@@ -271,9 +370,10 @@ body {
     margin: 7px 0;
 }
 
-/* ==============================
-   RESPONSIVE
-============================== */
+
+/* =====================================
+   DISEÑO RESPONSIVE
+===================================== */
 
 @media (max-width: 600px) {
 
@@ -321,4 +421,15 @@ body {
     .tr-detalle strong {
         text-align: left;
     }
+
+    .tr-humedad-estado {
+        max-width: 100%;
+        padding: 9px 14px;
+        font-size: 13px;
+    }
+
+    #mensaje-humedad {
+        font-size: 13px;
+    }
+
 }

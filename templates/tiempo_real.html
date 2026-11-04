@@ -8,7 +8,7 @@
     <meta name="viewport"
           content="width=device-width, initial-scale=1.0">
 
-    <title>Monitoreo en Tiempo Real - Orquídeas</title>
+    <title>Monitoreo Ambiental - Orquídeas</title>
 
     <link rel="stylesheet"
           href="{{ url_for('static', filename='tiempo_real.css') }}">
@@ -36,18 +36,18 @@
         </span>
 
         <h1>
-            Monitoreo en tiempo real
+            Monitoreo ambiental
         </h1>
 
         <p>
-            Consulta automáticamente las últimas
-            mediciones de humedad y temperatura.
+            Supervisa en tiempo real la humedad y
+            temperatura ambiental de tus orquídeas.
         </p>
 
     </header>
 
 
-    <!-- NAVEGACIÓN -->
+    <!-- NAVEGACION -->
 
     <nav class="tr-navegacion">
 
@@ -55,8 +55,8 @@
             Volver al calendario
         </a>
 
-        <a href="{{ url_for('monitoreo.pagina_humedad') }}">
-            Monitoreo de humedad
+        <a href="{{ url_for('historial.pagina_configuracion') }}">
+            Configurar frecuencia
         </a>
 
         <button type="button" id="actualizar-ahora">
@@ -66,7 +66,7 @@
     </nav>
 
 
-    <!-- ESTADO DE CONEXIÓN -->
+    <!-- ESTADO DE CONEXION -->
 
     <section class="tr-estado-conexion">
 
@@ -75,7 +75,9 @@
             class="tr-indicador">
         </span>
 
-        <p id="estado-conexion" role="status" aria-live="polite">
+        <p id="estado-conexion"
+           role="status"
+           aria-live="polite">
             Consultando mediciones...
         </p>
 
@@ -103,8 +105,21 @@
                 <span class="tr-unidad">%</span>
             </div>
 
-            <p class="tr-descripcion">
-                Humedad registrada por el dispositivo.
+            <!-- V5: ESTADO DE HUMEDAD -->
+
+            <p
+                id="estado-humedad"
+                role="status"
+                aria-live="polite"
+            >
+                Esperando evaluación de humedad...
+            </p>
+
+            <p
+                id="mensaje-humedad"
+                class="tr-descripcion"
+            >
+                Esperando la última medición disponible.
             </p>
 
         </article>
@@ -136,7 +151,48 @@
     </section>
 
 
-    <!-- INFORMACIÓN DE LA MEDICIÓN -->
+    <!-- V5: CONFIGURACION DE HUMEDAD -->
+
+    <section class="tr-tarjeta tr-informacion">
+
+        <h2>
+            Condiciones de humedad
+        </h2>
+
+        <div class="tr-detalle">
+
+            <span>
+                Humedad mínima configurada
+            </span>
+
+            <strong id="humedad-minima">
+                --
+            </strong>
+
+        </div>
+
+        <div class="tr-detalle">
+
+            <span>
+                Humedad máxima configurada
+            </span>
+
+            <strong id="humedad-maxima">
+                --
+            </strong>
+
+        </div>
+
+        <p class="tr-descripcion">
+            El sistema compara la última medición
+            de humedad con los límites configurados
+            para determinar si está dentro del rango.
+        </p>
+
+    </section>
+
+
+    <!-- INFORMACION DE LA MEDICION -->
 
     <section class="tr-tarjeta tr-informacion">
 
@@ -200,7 +256,7 @@
     </section>
 
 
-    <!-- AVISO DE SIMULACIÓN -->
+    <!-- AVISO DE SIMULACION -->
 
     <section
         class="tr-aviso"
@@ -213,13 +269,13 @@
     </section>
 
 
-    <!-- PIE DE PÁGINA -->
+    <!-- PIE DE PAGINA -->
 
     <footer class="tr-footer">
 
         <p>
-            Los datos se consultan automáticamente
-            cada 5 segundos.
+            El panel consulta las mediciones
+            automáticamente cada 5 segundos.
         </p>
 
         <p>

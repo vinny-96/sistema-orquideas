@@ -1,10 +1,53 @@
+
+# =====================================
+# ENTORNOS VIRTUALES
+# =====================================
+
 .venv/
+venv/
+
+# =====================================
+# ARCHIVOS TEMPORALES DE PYTHON
+# =====================================
+
 __pycache__/
 *.pyc
-.env
 .pytest_cache/
+
+# =====================================
+# CONFIGURACION PRIVADA
+# =====================================
+
+.env
+.env.local
+
+# =====================================
+# CONFIGURACION DE VS CODE
+# =====================================
+
 .vscode/
+
+# =====================================
+# DATOS LOCALES DEL SISTEMA
+# =====================================
+
 data/calendario.json
+
+# V7 - Frecuencia configurada localmente
+data/configuracion_historial.json
+
+# Archivos temporales de escritura
 data/*.tmp
-# Credenciales privadas de dispositivos
+
+# =====================================
+# CREDENCIALES PRIVADAS DEL ESP8266
+# =====================================
+
 **/secretos.h
+
+# =====================================
+# ARCHIVOS TEMPORALES DEL SISTEMA
+# =====================================
+
+Thumbs.db
+.DS_Store

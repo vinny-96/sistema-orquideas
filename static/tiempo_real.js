@@ -1,13 +1,15 @@
 
-/* =====================================
-   V6 - MONITOREO EN TIEMPO REAL
-   Sistema de Monitoreo de Orquídeas
-===================================== */
+/*
+=====================================
+ V5 + V6 - MONITOREO AMBIENTAL
+ Sistema de Monitoreo de Orquideas
+=====================================
+*/
 
 // Actualizar cada 5 segundos.
 const INTERVALO_ACTUALIZACION = 5000;
 
-// Considerar antigua una medición con más de 2 minutos.
+// Considerar antigua una medicion con mas de 2 minutos.
 const LIMITE_ANTIGUEDAD = 2 * 60 * 1000;
 
 
@@ -17,31 +19,42 @@ const LIMITE_ANTIGUEDAD = 2 * 60 * 1000;
 
 const panel = document.getElementById("panel-tiempo-real");
 
+// Mediciones
 const valorHumedad = document.getElementById("valor-humedad");
 const valorTemperatura = document.getElementById("valor-temperatura");
 
+// V5 - Evaluacion de humedad
+const estadoHumedad = document.getElementById("estado-humedad");
+const mensajeHumedad = document.getElementById("mensaje-humedad");
+const humedadMinima = document.getElementById("humedad-minima");
+const humedadMaxima = document.getElementById("humedad-maxima");
+
+// Informacion de la medicion
 const sensorId = document.getElementById("sensor-id");
 const origenMedicion = document.getElementById("origen-medicion");
 const fechaMedicion = document.getElementById("fecha-medicion");
 const ultimaActualizacion = document.getElementById("ultima-actualizacion");
 
+// Estado de conexion
 const estadoConexion = document.getElementById("estado-conexion");
 const indicadorConexion = document.getElementById("indicador-conexion");
 
+// Avisos
 const avisoAntiguedad = document.getElementById("aviso-antiguedad");
 const avisoSimulacion = document.getElementById("aviso-simulacion");
 
+// Boton
 const botonActualizar = document.getElementById("actualizar-ahora");
 
-// URL generada por Flask.
+// URL generada por Flask
 const API_URL = panel.dataset.apiUrl;
 
-// Evita consultas simultáneas.
+// Evitar consultas simultaneas
 let consultando = false;
 
 
 // =====================================
-// CAMBIAR ESTADO DE CONEXIÓN
+// CAMBIAR ESTADO DE CONEXION
 // =====================================
 
 function cambiarEstado(mensaje, tipo) {
@@ -69,6 +82,10 @@ function cambiarEstado(mensaje, tipo) {
 // =====================================
 
 function formatearNumero(valor) {
+
+    if (valor === null || valor === undefined || valor === "") {
+        return "--";
+    }
 
     const numero = Number(valor);
 
@@ -116,7 +133,7 @@ function convertirFecha(fechaTexto) {
 
 
 // =====================================
-// COMPROBAR ANTIGÜEDAD
+// COMPROBAR ANTIGUEDAD
 // =====================================
 
 function comprobarAntiguedad(fechaTexto) {
@@ -142,6 +159,69 @@ function comprobarAntiguedad(fechaTexto) {
 
 
 // =====================================
+// V5 - MOSTRAR LIMITES DE HUMEDAD
+// =====================================
+
+function mostrarLimites(datos) {
+
+    const minimo = formatearNumero(datos.limite_minimo);
+    const maximo = formatearNumero(datos.limite_maximo);
+
+    humedadMinima.textContent =
+        minimo === "--" ? "--" : minimo + "%";
+
+    humedadMaxima.textContent =
+        maximo === "--" ? "--" : maximo + "%";
+}
+
+
+// =====================================
+// V5 - MOSTRAR EVALUACION DE HUMEDAD
+// =====================================
+
+function mostrarEstadoHumedad(datos) {
+
+    const codigo = datos.codigo;
+
+    estadoHumedad.className = "tr-humedad-estado";
+
+    if (codigo === "adecuada") {
+
+        estadoHumedad.textContent = "Humedad adecuada";
+
+        estadoHumedad.classList.add(
+            "tr-humedad-adecuada"
+        );
+
+    } else if (codigo === "baja") {
+
+        estadoHumedad.textContent = "Humedad baja";
+
+        estadoHumedad.classList.add(
+            "tr-humedad-baja"
+        );
+
+    } else if (codigo === "alta") {
+
+        estadoHumedad.textContent = "Humedad alta";
+
+        estadoHumedad.classList.add(
+            "tr-humedad-alta"
+        );
+
+    } else {
+
+        estadoHumedad.textContent =
+            "Evaluacion no disponible";
+    }
+
+    mensajeHumedad.textContent =
+        datos.mensaje ||
+        "No se pudo evaluar la humedad ambiental.";
+}
+
+
+// =====================================
 // LIMPIAR DATOS DEL PANEL
 // =====================================
 
@@ -149,6 +229,15 @@ function limpiarPanel() {
 
     valorHumedad.textContent = "--";
     valorTemperatura.textContent = "--";
+
+    estadoHumedad.className = "tr-humedad-estado";
+    estadoHumedad.textContent = "Sin mediciones";
+
+    mensajeHumedad.textContent =
+        "Todavia no existen mediciones registradas.";
+
+    humedadMinima.textContent = "--";
+    humedadMaxima.textContent = "--";
 
     sensorId.textContent = "--";
     origenMedicion.textContent = "--";
@@ -160,27 +249,33 @@ function limpiarPanel() {
 
 
 // =====================================
-// MOSTRAR MEDICIÓN
+// MOSTRAR MEDICION UNIFICADA
 // =====================================
 
 function mostrarMedicion(datos) {
 
-    valorHumedad.textContent = formatearNumero(
-        datos.humedad
-    );
+    // V6 - Humedad y temperatura
+    valorHumedad.textContent =
+        formatearNumero(datos.humedad);
 
-    valorTemperatura.textContent = formatearNumero(
-        datos.temperatura
-    );
+    valorTemperatura.textContent =
+        formatearNumero(datos.temperatura);
 
+    // V5 - Evaluacion y limites
+    mostrarEstadoHumedad(datos);
+    mostrarLimites(datos);
+
+    // Informacion del dispositivo
     sensorId.textContent = datos.sensor_id ?? "--";
 
     origenMedicion.textContent = datos.origen ?? "--";
 
     fechaMedicion.textContent = datos.fecha_hora ?? "--";
 
+    // Advertencia de simulacion
     avisoSimulacion.hidden = !datos.simulada;
 
+    // Comprobar antiguedad
     const antigua = comprobarAntiguedad(
         datos.fecha_hora
     );
@@ -188,7 +283,7 @@ function mostrarMedicion(datos) {
     if (antigua) {
 
         cambiarEstado(
-            "Conectado al servidor. La última medición es antigua.",
+            "Conectado al servidor. La ultima medicion es antigua.",
             "advertencia"
         );
 
@@ -198,7 +293,6 @@ function mostrarMedicion(datos) {
             "Conectado. Mediciones actualizadas.",
             "activo"
         );
-
     }
 }
 
@@ -224,6 +318,7 @@ async function actualizarMediciones() {
         });
 
         if (!respuesta.ok) {
+
             throw new Error(
                 "Error HTTP: " + respuesta.status
             );
@@ -235,19 +330,21 @@ async function actualizarMediciones() {
 
             limpiarPanel();
 
+            // Mostrar limites aunque no existan mediciones.
+            mostrarLimites(datos);
+
             cambiarEstado(
                 datos.mensaje ||
-                "Todavía no existen mediciones registradas.",
+                "Todavia no existen mediciones registradas.",
                 "advertencia"
             );
 
         } else {
 
             mostrarMedicion(datos);
-
         }
 
-        // Hora de la última consulta exitosa al servidor.
+        // Hora de la ultima consulta exitosa.
         ultimaActualizacion.textContent =
             new Date().toLocaleTimeString("es-CL");
 
@@ -267,13 +364,12 @@ async function actualizarMediciones() {
 
         consultando = false;
         botonActualizar.disabled = false;
-
     }
 }
 
 
 // =====================================
-// BOTÓN DE ACTUALIZACIÓN MANUAL
+// ACTUALIZACION MANUAL
 // =====================================
 
 botonActualizar.addEventListener(
@@ -283,10 +379,10 @@ botonActualizar.addEventListener(
 
 
 // =====================================
-// INICIAR MONITOREO AUTOMÁTICO
+// INICIAR MONITOREO AUTOMATICO
 // =====================================
 
-// Primera consulta al abrir la página.
+// Primera consulta al abrir la pagina.
 actualizarMediciones();
 
 // Repetir cada 5 segundos.

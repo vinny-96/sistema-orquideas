@@ -1,0 +1,161 @@
+
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Configuración del Historial - Orquídeas</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+<main class="contenedor">
+
+    <header class="encabezado">
+
+        <span class="etiqueta">
+            INVERNADERO INTELIGENTE
+        </span>
+
+        <h1>
+            Configuración del historial
+        </h1>
+
+        <p>
+            Selecciona cada cuánto tiempo
+            deseas registrar nuevas mediciones
+            de humedad y temperatura.
+        </p>
+
+    </header>
+
+    <section class="tarjeta">
+
+        <h2>Frecuencia de registro</h2>
+
+        <p>
+            Frecuencia actualmente configurada:
+            <strong>
+                {{ configuracion.intervalo_segundos }}
+                segundos
+            </strong>
+        </p>
+
+        {% if mensaje %}
+
+            <div class="mensaje exito">
+                {{ mensaje }}
+            </div>
+
+        {% endif %}
+
+        {% if error %}
+
+            <div class="mensaje error">
+                {{ error }}
+            </div>
+
+        {% endif %}
+
+        <form
+            method="POST"
+            action="{{ url_for('historial.pagina_configuracion') }}"
+            class="formulario"
+        >
+
+            <div class="campo">
+
+                <label for="intervalo-segundos">
+                    Intervalo de medición
+                </label>
+
+                <select
+                    id="intervalo-segundos"
+                    name="intervalo_segundos"
+                    required
+                >
+
+                    {% for intervalo in intervalos %}
+
+                    <option
+                        value="{{ intervalo }}"
+                        {% if intervalo == configuracion.intervalo_segundos %}
+                        selected
+                        {% endif %}
+                    >
+                        Cada {{ intervalo }} segundos
+                    </option>
+
+                    {% endfor %}
+
+                </select>
+
+            </div>
+
+            <button
+                type="submit"
+                class="boton-guardar"
+            >
+                Guardar frecuencia
+            </button>
+
+        </form>
+
+    </section>
+
+    <section class="tarjeta">
+
+        <h2>Información importante</h2>
+
+        <p>
+            El sistema permite configurar intervalos
+            de 10, 30, 60 y 120 segundos.
+        </p>
+
+        <p>
+            Esta configuración se conservará
+            aunque cierres y vuelvas a iniciar Flask.
+        </p>
+
+        <p>
+            La actualización del panel de tiempo real
+            seguirá funcionando cada 5 segundos.
+        </p>
+
+        <p>
+            La frecuencia seleccionada se aplicará
+            al ESP8266 cuando integremos la consulta
+            de configuración en el dispositivo.
+        </p>
+
+    </section>
+
+    <section class="tarjeta">
+
+        <a
+            href="{{ url_for('inicio') }}"
+            class="enlace-monitoreo"
+        >
+            Volver al inicio
+        </a>
+
+        <a
+            href="{{ url_for('tiempo_real.pagina_tiempo_real') }}"
+            class="enlace-monitoreo"
+        >
+            Ver monitoreo en tiempo real
+        </a>
+
+    </section>
+
+</main>
+
+</body>
+</html>

@@ -1,0 +1,257 @@
+
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Historial de mediciones - Orquídeas</title>
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='tiempo_real.css') }}"
+    >
+
+    <script
+        src="{{ url_for('static', filename='historial.js') }}"
+        defer
+    ></script>
+
+    <style>
+        .hist-contenido {
+            padding: 30px;
+            margin-top: 25px;
+        }
+
+        .hist-controles {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin: 25px 0;
+        }
+
+        .hist-controles label {
+            font-weight: bold;
+            color: #24573e;
+        }
+
+        .hist-controles select,
+        .hist-controles button {
+            padding: 12px 16px;
+            border-radius: 8px;
+            font-size: 14px;
+        }
+
+        .hist-controles select {
+            border: 1px solid #d1ddd4;
+            background: white;
+        }
+
+        .hist-controles button {
+            border: none;
+            background: #24573e;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .hist-controles button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .hist-tabla-contenedor {
+            width: 100%;
+            overflow-x: auto;
+            margin-top: 20px;
+        }
+
+        .hist-tabla {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+        }
+
+        .hist-tabla th {
+            background: #e4f0e7;
+            color: #24573e;
+            padding: 15px;
+            white-space: nowrap;
+        }
+
+        .hist-tabla td {
+            padding: 15px;
+            border-bottom: 1px solid #dce6df;
+        }
+
+        .hist-tabla tbody tr:hover {
+            background: #f1f7f3;
+        }
+
+        .hist-estado {
+            margin: 15px 0;
+            color: #55705e;
+        }
+
+        .hist-sin-datos {
+            text-align: center;
+            padding: 25px !important;
+        }
+
+        @media (max-width: 600px) {
+            .hist-controles {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .hist-controles select,
+            .hist-controles button {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<main
+    class="tr-contenedor"
+    id="panel-historial"
+    data-api-url="{{ url_for('historial.consultar_historial_lecturas') }}"
+>
+
+    <!-- ENCABEZADO -->
+
+    <header class="tr-encabezado">
+
+        <span class="tr-etiqueta">
+            INVERNADERO INTELIGENTE
+        </span>
+
+        <h1>Historial de mediciones</h1>
+
+        <p>
+            Consulta las mediciones anteriores de
+            humedad y temperatura de tus orquídeas.
+        </p>
+
+    </header>
+
+    <!-- NAVEGACION -->
+
+    <nav class="tr-navegacion">
+
+        <a href="/">
+            Volver al calendario
+        </a>
+
+        <a href="{{ url_for('tiempo_real.pagina_tiempo_real') }}">
+            Monitoreo ambiental
+        </a>
+
+        <a href="{{ url_for('historial.pagina_configuracion') }}">
+            Configurar frecuencia
+        </a>
+
+    </nav>
+
+    <!-- HISTORIAL -->
+
+    <section class="tr-tarjeta hist-contenido">
+
+        <h2>Mediciones registradas</h2>
+
+        <p>
+            Revisa los registros almacenados
+            en MySQL desde el más reciente.
+        </p>
+
+        <!-- CONTROLES -->
+
+        <div class="hist-controles">
+
+            <label for="limite-historial">
+                Mostrar últimos:
+            </label>
+
+            <select id="limite-historial">
+                <option value="10">10 registros</option>
+                <option value="20" selected>20 registros</option>
+                <option value="50">50 registros</option>
+                <option value="100">100 registros</option>
+            </select>
+
+            <button
+                type="button"
+                id="actualizar-historial"
+            >
+                Actualizar historial
+            </button>
+
+        </div>
+
+        <!-- ESTADO -->
+
+        <p
+            id="estado-historial"
+            class="hist-estado"
+            role="status"
+            aria-live="polite"
+        >
+            Consultando registros...
+        </p>
+
+        <!-- TABLA -->
+
+        <div class="hist-tabla-contenedor">
+
+            <table class="hist-tabla">
+
+                <thead>
+                    <tr>
+                        <th>Fecha y hora</th>
+                        <th>Dispositivo</th>
+                        <th>Humedad</th>
+                        <th>Temperatura</th>
+                        <th>Origen</th>
+                    </tr>
+                </thead>
+
+                <tbody id="filas-historial">
+
+                    <tr>
+                        <td
+                            colspan="5"
+                            class="hist-sin-datos"
+                        >
+                            Cargando mediciones...
+                        </td>
+                    </tr>
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </section>
+
+    <footer class="tr-footer">
+
+        <p>
+            Sistema de Monitoreo de Orquídeas
+        </p>
+
+        <p>
+            Datos almacenados en MySQL.
+            Las mediciones actuales son simuladas.
+        </p>
+
+    </footer>
+
+</main>
+
+</body>
+</html>

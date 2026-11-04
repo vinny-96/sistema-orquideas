@@ -5,282 +5,328 @@
 <head>
     <meta charset="UTF-8">
 
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1.0">
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
 
     <title>Sistema de Monitoreo de Orquídeas</title>
 
-    <link rel="stylesheet"
-          href="{{ url_for('static', filename='style.css') }}">
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='style.css') }}"
+    >
 </head>
 
 <body>
 
-    <main class="contenedor">
+<main class="contenedor">
 
-        <!-- ENCABEZADO -->
+    <!-- ===================================== -->
+    <!-- ENCABEZADO PRINCIPAL -->
+    <!-- ===================================== -->
 
-        <header class="encabezado">
+    <header class="encabezado">
 
-            <span class="etiqueta">
-                INVERNADERO INTELIGENTE
-            </span>
+        <span class="etiqueta">
+            INVERNADERO INTELIGENTE
+        </span>
 
-            <h1>
-                Sistema de Monitoreo de Orquídeas
-            </h1>
+        <h1>
+            Sistema de Monitoreo de Orquídeas
+        </h1>
 
-            <p>
-                Gestión y programación del riego
-                para el cultivo de orquídeas.
-            </p>
+        <p>
+            Gestión y programación del riego
+            para el cultivo de orquídeas.
+        </p>
 
-        </header>
+    </header>
 
 
-        <!-- RF1: CALENDARIO DE RIEGO -->
+    <!-- ===================================== -->
+    <!-- RF1 - CALENDARIO DE RIEGO -->
+    <!-- ===================================== -->
 
-        <section class="tarjeta">
+    <section class="tarjeta">
 
-            <h2>Calendario de Riego</h2>
+        <h2>Calendario de Riego</h2>
 
-            <p>
-                Selecciona el día y la hora en que
-                deseas regar tus orquídeas.
-            </p>
+        <p>
+            Selecciona el día y la hora en que
+            deseas regar tus orquídeas.
+        </p>
 
-            {% with mensajes = get_flashed_messages(with_categories=true) %}
+        <!-- MENSAJES DE FLASK -->
 
-                {% for categoria, mensaje in mensajes %}
+        {% with mensajes = get_flashed_messages(with_categories=true) %}
 
-                    <div class="mensaje {{ categoria }}">
-                        {{ mensaje }}
+            {% for categoria, mensaje in mensajes %}
+
+                <div class="mensaje {{ categoria }}">
+                    {{ mensaje }}
+                </div>
+
+            {% endfor %}
+
+        {% endwith %}
+
+
+        <!-- FORMULARIO DE RIEGO -->
+
+        <form
+            action="{{ url_for('agregar_riego') }}"
+            method="POST"
+            class="formulario"
+        >
+
+            <div class="campo">
+
+                <label for="dia">
+                    Día de riego
+                </label>
+
+                <select
+                    id="dia"
+                    name="dia"
+                    required
+                >
+
+                    <option value="">
+                        Seleccionar día
+                    </option>
+
+                    {% for dia in dias %}
+
+                        <option value="{{ dia }}">
+                            {{ dia|capitalize }}
+                        </option>
+
+                    {% endfor %}
+
+                </select>
+
+            </div>
+
+
+            <div class="campo">
+
+                <label for="hora">
+                    Hora de riego
+                </label>
+
+                <input
+                    type="time"
+                    id="hora"
+                    name="hora"
+                    required
+                >
+
+            </div>
+
+
+            <button
+                type="submit"
+                class="boton-guardar"
+            >
+                Guardar horario
+            </button>
+
+        </form>
+
+    </section>
+
+
+    <!-- ===================================== -->
+    <!-- RF2 - NOTIFICACIONES DE RIEGO -->
+    <!-- ===================================== -->
+
+    <section class="tarjeta">
+
+        <h2>Recordatorios de Riego</h2>
+
+        <p>
+            Recibe un aviso cuando llegue el
+            horario de riego programado.
+        </p>
+
+        <button
+            type="button"
+            id="activar-notificaciones"
+            class="boton-guardar"
+        >
+            Activar notificaciones
+        </button>
+
+        <p
+            id="estado-notificaciones"
+            class="estado-notificaciones"
+        >
+            Comprobando permisos...
+        </p>
+
+
+        <!-- ALERTA DE RIEGO -->
+
+        <div
+            id="alerta-riego"
+            class="alerta-riego"
+            role="status"
+            hidden
+        >
+
+            <strong>
+                Recordatorio de riego
+            </strong>
+
+            <p id="texto-alerta-riego"></p>
+
+            <button
+                type="button"
+                id="cerrar-alerta"
+                class="boton-cerrar-alerta"
+            >
+                Entendido
+            </button>
+
+        </div>
+
+    </section>
+
+
+    <!-- ===================================== -->
+    <!-- RF1 - RIEGOS PROGRAMADOS -->
+    <!-- ===================================== -->
+
+    <section class="tarjeta">
+
+        <h2>Riegos Programados</h2>
+
+        {% if calendario %}
+
+            <div class="lista-riegos">
+
+                {% for riego in calendario %}
+
+                    <div class="riego">
+
+                        <div class="informacion-riego">
+
+                            <strong>
+                                {{ riego.dia|capitalize }}
+                            </strong>
+
+                            <span>
+                                {{ riego.hora }} hrs.
+                            </span>
+
+                        </div>
+
+
+                        <!-- ELIMINAR HORARIO -->
+
+                        <form
+                            action="{{ url_for('eliminar_riego') }}"
+                            method="POST"
+                        >
+
+                            <input
+                                type="hidden"
+                                name="dia"
+                                value="{{ riego.dia }}"
+                            >
+
+                            <input
+                                type="hidden"
+                                name="hora"
+                                value="{{ riego.hora }}"
+                            >
+
+                            <button
+                                type="submit"
+                                class="boton-eliminar"
+                            >
+                                Eliminar
+                            </button>
+
+                        </form>
+
                     </div>
 
                 {% endfor %}
 
-            {% endwith %}
-
-            <form
-                action="{{ url_for('agregar_riego') }}"
-                method="POST"
-                class="formulario"
-            >
-
-                <div class="campo">
-
-                    <label for="dia">
-                        Día de riego
-                    </label>
-
-                    <select id="dia" name="dia" required>
-
-                        <option value="">
-                            Seleccionar día
-                        </option>
-
-                        {% for dia in dias %}
-
-                            <option value="{{ dia }}">
-                                {{ dia|capitalize }}
-                            </option>
-
-                        {% endfor %}
-
-                    </select>
-
-                </div>
-
-                <div class="campo">
-
-                    <label for="hora">
-                        Hora de riego
-                    </label>
-
-                    <input
-                        type="time"
-                        id="hora"
-                        name="hora"
-                        required
-                    >
-
-                </div>
-
-                <button
-                    type="submit"
-                    class="boton-guardar"
-                >
-                    Guardar horario
-                </button>
-
-            </form>
-
-        </section>
-
-
-        <!-- RF2: NOTIFICACIONES -->
-
-        <section class="tarjeta">
-
-            <h2>Recordatorios de Riego</h2>
-
-            <p>
-                Recibe un aviso cuando llegue el
-                horario de riego programado.
-            </p>
-
-            <button
-                type="button"
-                id="activar-notificaciones"
-                class="boton-guardar"
-            >
-                Activar notificaciones
-            </button>
-
-            <p
-                id="estado-notificaciones"
-                class="estado-notificaciones"
-            >
-                Comprobando permisos...
-            </p>
-
-            <div
-                id="alerta-riego"
-                class="alerta-riego"
-                role="status"
-                hidden
-            >
-
-                <strong>
-                    Recordatorio de riego
-                </strong>
-
-                <p id="texto-alerta-riego"></p>
-
-                <button
-                    type="button"
-                    id="cerrar-alerta"
-                    class="boton-cerrar-alerta"
-                >
-                    Entendido
-                </button>
-
             </div>
 
-        </section>
+        {% else %}
 
-
-        <!-- RF1: RIEGOS PROGRAMADOS -->
-
-        <section class="tarjeta">
-
-            <h2>Riegos Programados</h2>
-
-            {% if calendario %}
-
-                <div class="lista-riegos">
-
-                    {% for riego in calendario %}
-
-                        <div class="riego">
-
-                            <div class="informacion-riego">
-
-                                <strong>
-                                    {{ riego.dia|capitalize }}
-                                </strong>
-
-                                <span>
-                                    {{ riego.hora }} hrs.
-                                </span>
-
-                            </div>
-
-                            <form
-                                action="{{ url_for('eliminar_riego') }}"
-                                method="POST"
-                            >
-
-                                <input
-                                    type="hidden"
-                                    name="dia"
-                                    value="{{ riego.dia }}"
-                                >
-
-                                <input
-                                    type="hidden"
-                                    name="hora"
-                                    value="{{ riego.hora }}"
-                                >
-
-                                <button
-                                    type="submit"
-                                    class="boton-eliminar"
-                                >
-                                    Eliminar
-                                </button>
-
-                            </form>
-
-                        </div>
-
-                    {% endfor %}
-
-                </div>
-
-            {% else %}
-
-                <p class="sin-datos">
-                    Todavía no tienes horarios
-                    de riego configurados.
-                </p>
-
-            {% endif %}
-
-        </section>
-
-
-        <!-- RF4 Y RF7: MONITOREO AMBIENTAL - V5 Y V6 -->
-
-        <section class="tarjeta">
-
-            <h2>Monitoreo ambiental</h2>
-
-            <p>
-                Consulta las condiciones ambientales
-                registradas por el sistema y supervisa
-                la humedad y temperatura de tus orquídeas.
+            <p class="sin-datos">
+                Todavía no tienes horarios
+                de riego configurados.
             </p>
 
-            <!-- V5: MONITOREO DE HUMEDAD -->
+        {% endif %}
 
-            <a
-                href="{{ url_for('monitoreo.pagina_humedad') }}"
-                class="enlace-monitoreo"
-            >
-                Monitoreo de humedad
-            </a>
-
-            <!-- V6: MONITOREO EN TIEMPO REAL -->
-
-            <a
-                href="{{ url_for('tiempo_real.pagina_tiempo_real') }}"
-                class="enlace-monitoreo"
-            >
-                Humedad y temperatura en tiempo real
-            </a>
-
-        </section>
-
-    </main>
+    </section>
 
 
-    <!-- JAVASCRIPT DE NOTIFICACIONES -->
+    <!-- ===================================== -->
+    <!-- V5 + V6 + V7 - MONITOREO AMBIENTAL -->
+    <!-- ===================================== -->
 
-    <script
-        src="{{ url_for('static', filename='notificaciones.js') }}"
-        defer
-    ></script>
+    <section class="tarjeta">
+
+        <h2>Monitoreo ambiental</h2>
+
+        <p>
+            Supervisa la humedad y temperatura
+            de tus orquídeas, consulta las
+            mediciones anteriores y configura
+            la frecuencia de registro del ESP8266.
+        </p>
+
+
+        <!-- V5 + V6 - MONITOREO UNIFICADO -->
+
+        <a
+            href="{{ url_for('tiempo_real.pagina_tiempo_real') }}"
+            class="enlace-monitoreo"
+        >
+            Monitoreo ambiental en tiempo real
+        </a>
+
+
+        <!-- V7 - HISTORIAL DE MEDICIONES -->
+
+        <a
+            href="{{ url_for('historial.pagina_historial') }}"
+            class="enlace-monitoreo"
+        >
+            Historial de mediciones
+        </a>
+
+
+        <!-- V7 - CONFIGURACION DE FRECUENCIA -->
+
+        <a
+            href="{{ url_for('historial.pagina_configuracion') }}"
+            class="enlace-monitoreo"
+        >
+            Configurar frecuencia de mediciones
+        </a>
+
+    </section>
+
+</main>
+
+
+<!-- ===================================== -->
+<!-- RF2 - JAVASCRIPT DE NOTIFICACIONES -->
+<!-- ===================================== -->
+
+<script
+    src="{{ url_for('static', filename='notificaciones.js') }}"
+    defer
+></script>
 
 </body>
 </html>

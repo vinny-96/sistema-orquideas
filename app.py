@@ -7,7 +7,7 @@ from datetime import datetime
 from pathlib import Path
 from monitoreo_humedad import monitoreo_bp
 from tiempo_real import tiempo_real_bp
-
+from historial_api import historial_bp
 
 from flask import (
     Flask,
@@ -26,6 +26,7 @@ app = Flask(__name__)
 app.register_blueprint(sensores_bp)
 app.register_blueprint(monitoreo_bp)
 app.register_blueprint(tiempo_real_bp)
+app.register_blueprint(historial_bp)
 
 app.secret_key = os.environ.get(
     "FLASK_SECRET_KEY",
