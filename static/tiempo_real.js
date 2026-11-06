@@ -1,15 +1,16 @@
 
 /*
 =====================================
- V5 + V6 - MONITOREO AMBIENTAL
+ V5 + V6 + V7 - MONITOREO AMBIENTAL
  Sistema de Monitoreo de Orquideas
+ DHT22 + HC-SR04
 =====================================
 */
 
 // Actualizar cada 5 segundos.
 const INTERVALO_ACTUALIZACION = 5000;
 
-// Considerar antigua una medicion con mas de 2 minutos.
+// Considerar antigua una medicion de mas de 2 minutos.
 const LIMITE_ANTIGUEDAD = 2 * 60 * 1000;
 
 
@@ -19,13 +20,22 @@ const LIMITE_ANTIGUEDAD = 2 * 60 * 1000;
 
 const panel = document.getElementById("panel-tiempo-real");
 
-// Mediciones
+// Mediciones ambientales
 const valorHumedad = document.getElementById("valor-humedad");
 const valorTemperatura = document.getElementById("valor-temperatura");
 
-// V5 - Evaluacion de humedad
+// Nivel de agua del estanque
+const valorDistanciaAgua = document.getElementById(
+    "valor-distancia-agua"
+);
+
+const estadoAgua = document.getElementById("estado-agua");
+const mensajeAgua = document.getElementById("mensaje-agua");
+
+// Evaluacion de humedad
 const estadoHumedad = document.getElementById("estado-humedad");
 const mensajeHumedad = document.getElementById("mensaje-humedad");
+
 const humedadMinima = document.getElementById("humedad-minima");
 const humedadMaxima = document.getElementById("humedad-maxima");
 
@@ -33,17 +43,21 @@ const humedadMaxima = document.getElementById("humedad-maxima");
 const sensorId = document.getElementById("sensor-id");
 const origenMedicion = document.getElementById("origen-medicion");
 const fechaMedicion = document.getElementById("fecha-medicion");
-const ultimaActualizacion = document.getElementById("ultima-actualizacion");
+const ultimaActualizacion = document.getElementById(
+    "ultima-actualizacion"
+);
 
 // Estado de conexion
 const estadoConexion = document.getElementById("estado-conexion");
-const indicadorConexion = document.getElementById("indicador-conexion");
+const indicadorConexion = document.getElementById(
+    "indicador-conexion"
+);
 
 // Avisos
 const avisoAntiguedad = document.getElementById("aviso-antiguedad");
 const avisoSimulacion = document.getElementById("aviso-simulacion");
 
-// Boton
+// Boton de actualizacion
 const botonActualizar = document.getElementById("actualizar-ahora");
 
 // URL generada por Flask
@@ -83,7 +97,11 @@ function cambiarEstado(mensaje, tipo) {
 
 function formatearNumero(valor) {
 
-    if (valor === null || valor === undefined || valor === "") {
+    if (
+        valor === null ||
+        valor === undefined ||
+        valor === ""
+    ) {
         return "--";
     }
 
@@ -141,6 +159,7 @@ function comprobarAntiguedad(fechaTexto) {
     const fecha = convertirFecha(fechaTexto);
 
     if (!fecha) {
+
         avisoAntiguedad.hidden = false;
         return true;
     }
@@ -159,7 +178,7 @@ function comprobarAntiguedad(fechaTexto) {
 
 
 // =====================================
-// V5 - MOSTRAR LIMITES DE HUMEDAD
+// MOSTRAR LIMITES DE HUMEDAD
 // =====================================
 
 function mostrarLimites(datos) {
@@ -176,7 +195,7 @@ function mostrarLimites(datos) {
 
 
 // =====================================
-// V5 - MOSTRAR EVALUACION DE HUMEDAD
+// MOSTRAR ESTADO DE HUMEDAD
 // =====================================
 
 function mostrarEstadoHumedad(datos) {
@@ -222,6 +241,94 @@ function mostrarEstadoHumedad(datos) {
 
 
 // =====================================
+// MOSTRAR NIVEL DEL ESTANQUE
+// =====================================
+
+function mostrarAgua(datos, medicionAntigua = false) {
+
+    const distancia = datos.distancia_agua_cm;
+    const aguaBaja = datos.agua_baja;
+
+    estadoAgua.className = "tr-humedad-estado";
+
+    // La lectura puede ser antigua o venir de
+    // un registro sin datos del HC-SR04.
+
+    if (
+        distancia === null ||
+        distancia === undefined ||
+        distancia === "" ||
+        typeof aguaBaja !== "boolean" ||
+        formatearNumero(distancia) === "--"
+    ) {
+
+        valorDistanciaAgua.textContent = "--";
+
+        estadoAgua.textContent =
+            "Sin medicion disponible";
+
+        estadoAgua.classList.add(
+            "tr-agua-sin-datos"
+        );
+
+        mensajeAgua.textContent =
+            "Esperando una lectura valida del HC-SR04.";
+
+        return;
+    }
+
+    // Mostrar distancia del sensor.
+    valorDistanciaAgua.textContent =
+        formatearNumero(distancia);
+
+    // Evitar que un registro antiguo se
+    // interprete como nivel actual del agua.
+
+    if (medicionAntigua) {
+
+        estadoAgua.textContent = "Medicion antigua";
+
+        estadoAgua.classList.add(
+            "tr-agua-sin-datos"
+        );
+
+        mensajeAgua.textContent =
+            "Esta distancia corresponde a una medicion " +
+            "anterior. Comprueba la conexion del ESP8266.";
+
+        return;
+    }
+
+    // Estado del agua.
+    if (aguaBaja) {
+
+        estadoAgua.textContent = "Agua baja";
+
+        estadoAgua.classList.add(
+            "tr-agua-baja"
+        );
+
+        mensajeAgua.textContent =
+            "El estanque necesita agua. " +
+            "Los LED realizan una animacion de ola " +
+            "para avisar que el nivel esta bajo.";
+
+    } else {
+
+        estadoAgua.textContent = "Agua suficiente";
+
+        estadoAgua.classList.add(
+            "tr-agua-suficiente"
+        );
+
+        mensajeAgua.textContent =
+            "El agua se encuentra dentro del " +
+            "limite configurado en el ESP8266.";
+    }
+}
+
+
+// =====================================
 // LIMPIAR DATOS DEL PANEL
 // =====================================
 
@@ -239,6 +346,10 @@ function limpiarPanel() {
     humedadMinima.textContent = "--";
     humedadMaxima.textContent = "--";
 
+    // Limpiar tarjeta del estanque.
+    mostrarAgua({});
+
+    // Limpiar informacion del dispositivo.
     sensorId.textContent = "--";
     origenMedicion.textContent = "--";
     fechaMedicion.textContent = "--";
@@ -254,36 +365,42 @@ function limpiarPanel() {
 
 function mostrarMedicion(datos) {
 
-    // V6 - Humedad y temperatura
+    // Humedad y temperatura del DHT22.
     valorHumedad.textContent =
         formatearNumero(datos.humedad);
 
     valorTemperatura.textContent =
         formatearNumero(datos.temperatura);
 
-    // V5 - Evaluacion y limites
+    // Evaluacion y limites de humedad.
     mostrarEstadoHumedad(datos);
     mostrarLimites(datos);
 
-    // Informacion del dispositivo
+    // Datos del dispositivo.
     sensorId.textContent = datos.sensor_id ?? "--";
 
-    origenMedicion.textContent = datos.origen ?? "--";
+    origenMedicion.textContent =
+        datos.origen ?? "--";
 
-    fechaMedicion.textContent = datos.fecha_hora ?? "--";
+    fechaMedicion.textContent =
+        datos.fecha_hora ?? "--";
 
-    // Advertencia de simulacion
+    // Advertencia de datos simulados.
     avisoSimulacion.hidden = !datos.simulada;
 
-    // Comprobar antiguedad
+    // Comprobar antiguedad de la medicion.
     const antigua = comprobarAntiguedad(
         datos.fecha_hora
     );
 
+    // Distancia y estado del estanque.
+    mostrarAgua(datos, antigua);
+
     if (antigua) {
 
         cambiarEstado(
-            "Conectado al servidor. La ultima medicion es antigua.",
+            "Conectado al servidor. " +
+            "La ultima medicion es antigua.",
             "advertencia"
         );
 
@@ -330,7 +447,7 @@ async function actualizarMediciones() {
 
             limpiarPanel();
 
-            // Mostrar limites aunque no existan mediciones.
+            // Mantener visibles los limites.
             mostrarLimites(datos);
 
             cambiarEstado(
@@ -356,7 +473,8 @@ async function actualizarMediciones() {
         );
 
         cambiarEstado(
-            "No se pudieron consultar las mediciones. Comprueba Flask y MySQL.",
+            "No se pudieron consultar las mediciones. " +
+            "Comprueba Flask y MySQL.",
             "error"
         );
 

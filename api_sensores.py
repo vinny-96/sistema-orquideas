@@ -2,6 +2,7 @@
 import hmac
 import math
 import os
+
 from pathlib import Path
 
 import mysql.connector
@@ -77,25 +78,76 @@ def recibir_medicion():
             "error": "Temperatura fuera del rango admitido"
         }), 400
 
+    # =====================================
+    # DATOS OPCIONALES DEL ESTANQUE
+    # =====================================
+
+    tiene_distancia = "distancia_agua_cm" in datos
+    tiene_estado = "agua_baja" in datos
+
+    if tiene_distancia != tiene_estado:
+        return jsonify({
+            "error": "Faltan datos del estanque"
+        }), 400
+
+    datos_estanque = {}
+
+    if tiene_distancia:
+
+        distancia = datos["distancia_agua_cm"]
+        agua_baja = datos["agua_baja"]
+
+        if (
+            isinstance(distancia, bool)
+            or not isinstance(distancia, (int, float))
+            or not math.isfinite(distancia)
+            or not 2 <= distancia <= 400
+        ):
+            return jsonify({
+                "error": "Distancia del estanque inválida"
+            }), 400
+
+        if not isinstance(agua_baja, bool):
+            return jsonify({
+                "error": "El estado del agua debe ser booleano"
+            }), 400
+
+        datos_estanque = {
+            "distancia_agua_cm": distancia,
+            "agua_baja": agua_baja
+        }
+
+    # =====================================
+    # REGISTRAR EN MYSQL
+    # =====================================
+
     try:
         dao = LecturasDAO()
 
         id_lectura = dao.registrar_lectura(
             sensor_id=sensor_id.strip(),
             humedad=humedad,
-            temperatura=temperatura
+            temperatura=temperatura,
+            **datos_estanque
         )
 
-        return jsonify({
+        respuesta = {
             "mensaje": "Medición registrada correctamente",
             "id_lectura": id_lectura,
             "sensor_id": sensor_id.strip(),
             "humedad": humedad,
             "temperatura": temperatura
-        }), 201
+        }
+
+        respuesta.update(datos_estanque)
+
+        return jsonify(respuesta), 201
 
     except mysql.connector.Error:
-        current_app.logger.exception("Error al guardar medición")
+        current_app.logger.exception(
+            "Error al guardar medición"
+        )
+
         return jsonify({
             "error": "No se pudo guardar la medición"
         }), 503

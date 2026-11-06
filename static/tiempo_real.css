@@ -311,6 +311,58 @@ body {
 
 
 /* =====================================
+   V7 - TARJETA DEL ESTANQUE
+===================================== */
+
+/* La tarjeta ocupa las dos columnas. */
+
+.tr-grid .tr-estanque {
+    grid-column: 1 / -1;
+}
+
+/* Distancia al agua. */
+
+.tr-estanque .tr-valor {
+    font-size: 48px;
+}
+
+.tr-estanque .tr-descripcion {
+    max-width: 550px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* Agua suficiente: verde. */
+
+.tr-agua-suficiente {
+    background-color: #e2f3e7;
+    color: #21653c;
+    border-color: #8bc69d;
+}
+
+/* Agua baja: rojo. */
+
+.tr-agua-baja {
+    background-color: #fde7e7;
+    color: #9d3030;
+    border-color: #e1a1a1;
+}
+
+/* Sensor sin datos o medicion antigua. */
+
+.tr-agua-sin-datos {
+    background-color: #fff2d3;
+    color: #865a10;
+    border-color: #e5bc65;
+}
+
+#mensaje-agua {
+    margin-top: 5px;
+    line-height: 1.6;
+}
+
+
+/* =====================================
    INFORMACION DE LA MEDICION
 ===================================== */
 
@@ -432,6 +484,10 @@ body {
         font-size: 24px;
     }
 
+    .tr-estanque .tr-valor {
+        font-size: 42px;
+    }
+
     .tr-navegacion {
         flex-direction: column;
     }
@@ -458,7 +514,8 @@ body {
         font-size: 13px;
     }
 
-    #mensaje-humedad {
+    #mensaje-humedad,
+    #mensaje-agua {
         font-size: 13px;
     }
 }

@@ -1,3 +1,4 @@
+
 import math
 
 from conexion import obtener_conexion
@@ -9,7 +10,9 @@ class LecturasDAO:
         self,
         sensor_id,
         humedad,
-        temperatura
+        temperatura,
+        distancia_agua_cm=None,
+        agua_baja=None
     ):
 
         if not isinstance(sensor_id, str) or not sensor_id.strip():
@@ -21,8 +24,31 @@ class LecturasDAO:
         if not math.isfinite(humedad) or not 0 <= humedad <= 100:
             raise ValueError("La humedad debe estar entre 0 y 100.")
 
-        if not math.isfinite(temperatura):
+        if not math.isfinite(temperatura) or not -40 <= temperatura <= 85:
             raise ValueError("La temperatura debe ser válida.")
+
+        # Los dos campos del estanque deben venir
+        # juntos o estar ausentes.
+        if (distancia_agua_cm is None) != (agua_baja is None):
+            raise ValueError(
+                "La distancia y el estado del agua deben enviarse juntos."
+            )
+
+        if distancia_agua_cm is not None:
+
+            if isinstance(distancia_agua_cm, bool):
+                raise ValueError("Distancia inválida.")
+
+            distancia_agua_cm = float(distancia_agua_cm)
+
+            if (
+                not math.isfinite(distancia_agua_cm)
+                or not 2 <= distancia_agua_cm <= 400
+            ):
+                raise ValueError("Distancia fuera del rango admitido.")
+
+            if not isinstance(agua_baja, bool):
+                raise ValueError("Estado del agua inválido.")
 
         conexion = obtener_conexion()
 
@@ -31,14 +57,26 @@ class LecturasDAO:
 
             try:
                 sql = """
-                INSERT INTO lecturas_ambientales
-                (sensor_id, humedad, temperatura)
-                VALUES (%s, %s, %s)
+                    INSERT INTO lecturas_ambientales
+                    (
+                        sensor_id,
+                        humedad,
+                        temperatura,
+                        distancia_agua_cm,
+                        agua_baja
+                    )
+                    VALUES (%s, %s, %s, %s, %s)
                 """
 
                 cursor.execute(
                     sql,
-                    (sensor_id.strip(), humedad, temperatura)
+                    (
+                        sensor_id.strip(),
+                        humedad,
+                        temperatura,
+                        distancia_agua_cm,
+                        agua_baja
+                    )
                 )
 
                 conexion.commit()
@@ -50,7 +88,6 @@ class LecturasDAO:
 
         finally:
             conexion.close()
-
 
     def obtener_ultimas_lecturas(self, limite=10):
 
@@ -64,15 +101,17 @@ class LecturasDAO:
 
             try:
                 sql = """
-                SELECT
-                    id_lectura,
-                    sensor_id,
-                    humedad,
-                    temperatura,
-                    fecha_hora
-                FROM lecturas_ambientales
-                ORDER BY fecha_hora DESC, id_lectura DESC
-                LIMIT %s
+                    SELECT
+                        id_lectura,
+                        sensor_id,
+                        humedad,
+                        temperatura,
+                        distancia_agua_cm,
+                        agua_baja,
+                        fecha_hora
+                    FROM lecturas_ambientales
+                    ORDER BY fecha_hora DESC, id_lectura DESC
+                    LIMIT %s
                 """
 
                 cursor.execute(sql, (limite,))

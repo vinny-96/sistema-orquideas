@@ -40,8 +40,9 @@
         </h1>
 
         <p>
-            Supervisa en tiempo real la humedad y
-            temperatura ambiental de tus orquídeas.
+            Supervisa en tiempo real la humedad,
+            temperatura ambiental y nivel de agua
+            del estanque de tus orquídeas.
         </p>
 
     </header>
@@ -75,9 +76,11 @@
             class="tr-indicador">
         </span>
 
-        <p id="estado-conexion"
-           role="status"
-           aria-live="polite">
+        <p
+            id="estado-conexion"
+            role="status"
+            aria-live="polite"
+        >
             Consultando mediciones...
         </p>
 
@@ -88,7 +91,7 @@
 
     <section class="tr-grid">
 
-        <!-- HUMEDAD -->
+        <!-- HUMEDAD AMBIENTAL -->
 
         <article class="tr-tarjeta">
 
@@ -125,7 +128,7 @@
         </article>
 
 
-        <!-- TEMPERATURA -->
+        <!-- TEMPERATURA AMBIENTAL -->
 
         <article class="tr-tarjeta">
 
@@ -143,7 +146,53 @@
             </div>
 
             <p class="tr-descripcion">
-                Temperatura registrada por el dispositivo.
+                Temperatura registrada por el
+                sensor DHT22 del ESP8266.
+            </p>
+
+        </article>
+
+
+        <!-- NIVEL DE AGUA DEL ESTANQUE -->
+
+        <article class="tr-tarjeta tr-estanque">
+
+            <h2>
+                Nivel de agua del estanque
+            </h2>
+
+            <div class="tr-icono">
+                🌊
+            </div>
+
+            <p class="tr-descripcion">
+                Distancia entre el sensor ultrasónico
+                HC-SR04 y la superficie del agua.
+            </p>
+
+            <div class="tr-valor">
+                <span id="valor-distancia-agua">--</span>
+                <span class="tr-unidad">cm</span>
+            </div>
+
+            <!-- ESTADO DEL ESTANQUE -->
+
+            <p
+                id="estado-agua"
+                class="tr-humedad-estado"
+                role="status"
+                aria-live="polite"
+            >
+                Esperando medición del estanque...
+            </p>
+
+            <!-- MENSAJE DEL NIVEL DE AGUA -->
+
+            <p
+                id="mensaje-agua"
+                class="tr-descripcion"
+            >
+                Esperando datos del sensor ultrasónico.
             </p>
 
         </article>
@@ -202,7 +251,9 @@
 
         <div class="tr-detalle">
 
-            <span>Dispositivo</span>
+            <span>
+                Dispositivo
+            </span>
 
             <strong id="sensor-id">
                 --
@@ -212,7 +263,9 @@
 
         <div class="tr-detalle">
 
-            <span>Origen de los datos</span>
+            <span>
+                Origen de los datos
+            </span>
 
             <strong id="origen-medicion">
                 --
@@ -222,7 +275,9 @@
 
         <div class="tr-detalle">
 
-            <span>Fecha de registro</span>
+            <span>
+                Fecha de registro
+            </span>
 
             <strong id="fecha-medicion">
                 --
@@ -232,7 +287,9 @@
 
         <div class="tr-detalle">
 
-            <span>Última actualización del panel</span>
+            <span>
+                Última actualización del panel
+            </span>
 
             <strong id="ultima-actualizacion">
                 --
@@ -276,6 +333,10 @@
         <p>
             El panel consulta las mediciones
             automáticamente cada 5 segundos.
+        </p>
+
+        <p>
+            Sensores integrados: DHT22 y HC-SR04.
         </p>
 
         <p>
