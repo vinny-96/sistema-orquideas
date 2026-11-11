@@ -16,8 +16,8 @@ from monitoreo_humedad import evaluar_humedad
 
 
 # =====================================
-# V5 + V6 + V7 - MONITOREO AMBIENTAL
-# INTEGRACION DE SENSOR ULTRASONICO
+# V8 - MONITOREO AMBIENTAL UNIFICADO
+# DHT22 + HC-SR04 + ESP8266
 # =====================================
 
 tiempo_real_bp = Blueprint("tiempo_real", __name__)
@@ -174,16 +174,22 @@ def consultar_tiempo_real():
             )
 
         # =====================================
-        # ORIGEN DE LA MEDICION
+        # IDENTIFICAR ORIGEN DE LA MEDICION
         # =====================================
 
         simulada = "_SIM_" in sensor_id
 
-        origen = (
-            "Simulado"
-            if simulada
-            else "Origen no verificado"
-        )
+        if simulada:
+
+            origen = "Simulado"
+
+        elif sensor_id == "ESP8266_REAL_01":
+
+            origen = "ESP8266 - Sensores reales"
+
+        else:
+
+            origen = "Origen no verificado"
 
         # =====================================
         # RESPUESTA JSON UNIFICADA
